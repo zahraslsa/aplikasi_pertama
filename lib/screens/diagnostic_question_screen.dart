@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../widgets/codify_button.dart';
+import 'diagnostic_result_screen.dart';
 
 class DiagnosticQuestionScreen extends StatefulWidget {
   const DiagnosticQuestionScreen({super.key});
@@ -271,65 +272,41 @@ class _DiagnosticQuestionScreenState extends State<DiagnosticQuestionScreen> {
   }
 
   void showResult() {
-    int score = 0;
+    int totalCorrect = 0;
+
+    final Map<String, int> topicCorrect = {
+      'Algoritma & Flowchart': 0,
+      'Variabel & Tipe Data': 0,
+      'Operator': 0,
+      'Percabangan': 0,
+      'Perulangan': 0,
+    };
 
     for (int i = 0; i < questions.length; i++) {
       if (answers[i] == questions[i]['answer']) {
-        score++;
+        totalCorrect++;
+
+        final topic = questions[i]['topic'] as String;
+        topicCorrect[topic] = topicCorrect[topic]! + 1;
       }
     }
 
-    final percentage = (score / questions.length * 100).round();
+    final Map<String, int> topicScores = {};
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Tes Selesai'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.emoji_events_rounded,
-                size: 60,
-                color: AppColors.primary,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                '$score / ${questions.length}',
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nilai kamu: $percentage',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Hasil tes akan digunakan untuk menentukan rekomendasi belajar.',
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text('Selesai'),
-            ),
-          ],
-        );
-      },
+    topicCorrect.forEach((topic, correct) {
+      topicScores[topic] = ((correct / 5) * 100).round();
+    });
+
+    final overallScore = ((totalCorrect / questions.length) * 100).round();
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DiagnosticResultScreen(
+          topicScores: topicScores,
+          overallScore: overallScore,
+        ),
+      ),
     );
   }
 
