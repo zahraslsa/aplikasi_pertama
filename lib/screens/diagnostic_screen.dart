@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../widgets/codify_button.dart';
+import 'diagnostic_question_screen.dart';
 
 class DiagnosticScreen extends StatelessWidget {
   const DiagnosticScreen({super.key});
@@ -239,12 +240,10 @@ class DiagnosticScreen extends StatelessWidget {
               CodifyButton(
                 text: 'Mulai Tes Diagnostik',
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Halaman pengerjaan soal akan dibuat '
-                        'pada tahap berikutnya.',
-                      ),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DiagnosticQuestionScreen(),
                     ),
                   );
                 },
