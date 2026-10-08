@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import 'diagnostic_screen.dart';
+import 'material_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -243,7 +244,12 @@ class DashboardScreen extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: 0,
         onDestinationSelected: (index) {
-          if (index != 0) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MaterialScreen()),
+            );
+          } else if (index != 0) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Halaman ini akan dibuat pada tahap berikutnya.'),
