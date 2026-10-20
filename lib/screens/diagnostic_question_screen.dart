@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
 import '../widgets/codify_button.dart';
 import 'diagnostic_result_screen.dart';
@@ -271,7 +272,7 @@ class _DiagnosticQuestionScreenState extends State<DiagnosticQuestionScreen> {
     }
   }
 
-  void showResult() {
+  Future<void> showResult() async {
     int totalCorrect = 0;
 
     final Map<String, int> topicCorrect = {
@@ -299,6 +300,24 @@ class _DiagnosticQuestionScreenState extends State<DiagnosticQuestionScreen> {
 
     final overallScore = ((totalCorrect / questions.length) * 100).round();
 
+    try {
+      await LearningStore.saveDiagnosticResult(
+        overallScore: overallScore,
+        topicScores: topicScores,
+      );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Hasil tes tidak berhasil disimpan: $error')),
+      );
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

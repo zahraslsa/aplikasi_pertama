@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
+import 'material_practice_screen.dart';
 
 class MaterialDetailScreen extends StatelessWidget {
   final Map<String, dynamic> material;
@@ -409,6 +411,8 @@ print(status);''',
                     .toList(),
               ),
             ),
+            const SizedBox(height: 24),
+            MaterialLearningActions(material: material),
           ],
         ),
       ),
@@ -423,6 +427,113 @@ print(status);''',
         fontWeight: FontWeight.bold,
         color: AppColors.textPrimary,
       ),
+    );
+  }
+}
+
+class MaterialLearningActions extends StatefulWidget {
+  final Map<String, dynamic> material;
+
+  const MaterialLearningActions({super.key, required this.material});
+
+  @override
+  State<MaterialLearningActions> createState() =>
+      _MaterialLearningActionsState();
+}
+
+class _MaterialLearningActionsState extends State<MaterialLearningActions> {
+  late Future<Set<String>> _completedMaterials;
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCompletion();
+  }
+
+  void _loadCompletion() {
+    _completedMaterials = LearningStore.getCompletedMaterials();
+  }
+
+  Future<void> _markCompleted() async {
+    setState(() => _isSaving = true);
+    try {
+      await LearningStore.markMaterialCompleted(
+        widget.material['number'] as String,
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _isSaving = false;
+        _loadCompletion();
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Progres materi tidak berhasil disimpan: $error'),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ElevatedButton.icon(
+          onPressed: () async {
+            await Navigator.push<void>(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    MaterialPracticeScreen(material: widget.material),
+              ),
+            );
+            if (mounted) {
+              setState(_loadCompletion);
+            }
+          },
+          icon: const Icon(Icons.quiz_outlined),
+          label: const Text('Mulai Latihan Interaktif'),
+        ),
+        const SizedBox(height: 12),
+        FutureBuilder<Set<String>>(
+          future: _completedMaterials,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text(
+                'Progres materi gagal dimuat: ${snapshot.error}',
+                style: const TextStyle(color: AppColors.error),
+              );
+            }
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            final isCompleted = snapshot.data!.contains(
+              widget.material['number'],
+            );
+            if (isCompleted) {
+              return const ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Icons.check_circle, color: AppColors.success),
+                title: Text('Materi sudah ditandai selesai'),
+              );
+            }
+            return OutlinedButton.icon(
+              onPressed: _isSaving ? null : _markCompleted,
+              icon: const Icon(Icons.check_circle_outline_rounded),
+              label: Text(_isSaving ? 'Menyimpan...' : 'Tandai Materi Selesai'),
+            );
+          },
+        ),
+      ],
     );
   }
 }

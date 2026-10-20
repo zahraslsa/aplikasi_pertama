@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
 import '../widgets/codify_logo.dart';
 import '../widgets/codify_input.dart';
 import '../widgets/codify_button.dart';
+import 'dashboard_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -21,6 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool passwordVisible = false;
   bool confirmPasswordVisible = false;
+  bool isSaving = false;
 
   @override
   void dispose() {
@@ -30,6 +33,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _register() async {
+    if (nameController.text.trim().isEmpty ||
+        usernameController.text.trim().isEmpty ||
+        emailController.text.trim().isEmpty ||
+        passwordController.text.isEmpty ||
+        confirmPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Lengkapi semua data pendaftaran.')),
+      );
+      return;
+    }
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Konfirmasi password belum sesuai.')),
+      );
+      return;
+    }
+
+    setState(() => isSaving = true);
+    try {
+      await LearningStore.saveProfile({
+        'name': nameController.text.trim(),
+        'username': usernameController.text.trim(),
+        'email': emailController.text.trim(),
+        'class': 'X PPLG',
+      });
+      if (!mounted) {
+        return;
+      }
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        (route) => false,
+      );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profil pendaftaran gagal disimpan: $error')),
+      );
+    }
   }
 
   @override
@@ -145,15 +193,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               CodifyButton(
                 text: 'Daftar',
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Fitur pendaftaran akan dihubungkan nanti.',
-                      ),
-                    ),
-                  );
-                },
+                onPressed: _register,
+                isLoading: isSaving,
               ),
 
               const SizedBox(height: 16),

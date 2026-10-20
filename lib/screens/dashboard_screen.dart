@@ -1,16 +1,42 @@
 import 'package:flutter/material.dart';
 
+import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
+import 'material_detail_screen.dart';
 import 'diagnostic_screen.dart';
 import 'material_screen.dart';
+import 'profile_screen.dart';
+import 'progress_screen.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  int _selectedIndex = 0;
+  int _progressRevision = 0;
+  late Future<Map<String, String>> _profile;
+  late Future<Set<String>> _completedMaterials;
+
+  @override
+  void initState() {
+    super.initState();
+    _reloadHomeData();
+  }
+
+  void _reloadHomeData() {
+    _profile = LearningStore.getProfile();
+    _completedMaterials = LearningStore.getCompletedMaterials();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _selectedIndex == 0
+          ? AppBar(
         title: const Text(
           'CODIFY',
           style: TextStyle(
@@ -21,31 +47,82 @@ class DashboardScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Halaman profil akan dibuat nanti.'),
-                ),
-              );
-            },
+            onPressed: () => setState(() => _selectedIndex = 3),
             icon: const Icon(Icons.account_circle_outlined),
             tooltip: 'Profil',
           ),
           const SizedBox(width: 8),
         ],
+      )
+          : null,
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          _buildHomeContent(context),
+          const MaterialScreen(),
+          ProgressScreen(key: ValueKey(_progressRevision)),
+          const ProfileScreen(),
+        ],
       ),
-      body: SingleChildScrollView(
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+            if (index == 0) {
+              _reloadHomeData();
+            } else if (index == 2) {
+              _progressRevision++;
+            }
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded),
+            label: 'Beranda',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.menu_book_outlined),
+            label: 'Materi',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_rounded),
+            label: 'Progres',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            label: 'Profil',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHomeContent(BuildContext context) {
+    return SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Halo, Sobat CODIFY!',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
+            FutureBuilder<Map<String, String>>(
+              future: _profile,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text(
+                    'Profil gagal dimuat: ${snapshot.error}',
+                    style: const TextStyle(color: AppColors.error),
+                  );
+                }
+                return Text(
+                  'Halo, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
+                  style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 8),
             const Text(
@@ -59,66 +136,7 @@ class DashboardScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Kartu progres belajar
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(
-                        Icons.auto_graph_rounded,
-                        color: Colors.white,
-                        size: 26,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Progres Belajarmu',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    '0%',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: const LinearProgressIndicator(
-                      value: 0,
-                      minHeight: 8,
-                      backgroundColor: Color(0x668FFFFFF),
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Mulai belajar untuk melihat perkembanganmu.',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                ],
-              ),
-            ),
+            _buildProgressCard(context),
 
             const SizedBox(height: 28),
 
@@ -236,47 +254,100 @@ class DashboardScreen extends StatelessWidget {
               subtitle: 'Menjalankan instruksi secara berulang.',
               number: '05',
             ),
+            OutlinedButton.icon(
+              onPressed: () => setState(() => _selectedIndex = 1),
+              icon: const Icon(Icons.menu_book_rounded),
+              label: const Text('Lihat Semua 12 Materi'),
+            ),
           ],
         ),
-      ),
+      );
+  }
 
-      // Navigasi bawah
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 0,
-        onDestinationSelected: (index) {
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MaterialScreen()),
-            );
-          } else if (index != 0) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Halaman ini akan dibuat pada tahap berikutnya.'),
+  Widget _buildProgressCard(BuildContext context) {
+    return FutureBuilder<Set<String>>(
+      future: _completedMaterials,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text(
+            'Progres gagal dimuat: ${snapshot.error}',
+            style: const TextStyle(color: AppColors.error),
+          );
+        }
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final count = snapshot.data!.length;
+        final progress = count / MaterialScreen.allMaterials.length;
+        return InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () => setState(() => _selectedIndex = 2),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.primary, AppColors.primaryDark],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-            );
-          }
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
-            label: 'Beranda',
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.auto_graph_rounded,
+                      color: Colors.white,
+                      size: 26,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Progres Belajarmu',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  '${(progress * 100).round()}%',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 34,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: LinearProgressIndicator(
+                    value: progress,
+                    minHeight: 8,
+                    backgroundColor: const Color(0x66FFFFFF),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  count == 0
+                      ? 'Mulai belajar untuk melihat perkembanganmu.'
+                      : '$count dari 12 materi selesai. Ketuk untuk melihat progres.',
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ],
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
-            label: 'Materi',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Progres',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline_rounded),
-            label: 'Profil',
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -286,7 +357,19 @@ class DashboardScreen extends StatelessWidget {
     required String subtitle,
     required String number,
   }) {
-    return Container(
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MaterialDetailScreen(
+              material: MaterialScreen.materialForNumber(number),
+            ),
+          ),
+        );
+      },
+      child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -338,6 +421,7 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

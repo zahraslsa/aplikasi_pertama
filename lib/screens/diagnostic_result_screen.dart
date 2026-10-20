@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'material_detail_screen.dart';
 import '../theme/app_colors.dart';
+import 'material_screen.dart';
 import '../widgets/codify_button.dart';
 
 class DiagnosticResultScreen extends StatelessWidget {
@@ -24,6 +26,13 @@ class DiagnosticResultScreen extends StatelessWidget {
 
     return 'Prioritaskan belajar pada materi ${belowTarget.first.key}. '
         'Materi ini memiliki nilai paling rendah dan perlu diperkuat.';
+  }
+
+  String? get recommendedTopic {
+    final belowTarget =
+        topicScores.entries.where((entry) => entry.value < 80).toList()
+          ..sort((a, b) => a.value.compareTo(b.value));
+    return belowTarget.isEmpty ? null : belowTarget.first.key;
   }
 
   Color getScoreColor(int score) {
@@ -86,6 +95,30 @@ class DiagnosticResultScreen extends StatelessWidget {
 
             const SizedBox(height: 28),
 
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  final material = recommendedTopic == null
+                      ? MaterialScreen.materialForNumber('06')
+                      : MaterialScreen.materialForTopic(recommendedTopic!);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MaterialDetailScreen(material: material),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.menu_book_rounded),
+                label: Text(
+                  recommendedTopic == null
+                      ? 'Mulai Materi Pengayaan'
+                      : 'Pelajari $recommendedTopic',
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
             CodifyButton(
               text: 'Kembali ke Beranda',
               onPressed: () {

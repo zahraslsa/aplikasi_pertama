@@ -84,6 +84,27 @@ class MaterialScreen extends StatelessWidget {
     },
   ];
 
+  static List<Map<String, dynamic>> get allMaterials => [
+    ...basicMaterials,
+    ...additionalMaterials,
+  ];
+
+  static Map<String, dynamic> materialForNumber(String number) {
+    return allMaterials.firstWhere(
+      (material) => material['number'] == number,
+      orElse: () => throw ArgumentError.value(number, 'number'),
+    );
+  }
+
+  static Map<String, dynamic> materialForTopic(String topic) {
+    for (final material in basicMaterials) {
+      if (material['title'] == topic) {
+        return material;
+      }
+    }
+    throw ArgumentError.value(topic, 'topic');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
