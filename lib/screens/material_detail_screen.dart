@@ -166,8 +166,7 @@ print(nama.length);''',
         'Output dapat berupa teks, angka, atau informasi lain.',
         'Data input perlu diperiksa sebelum diproses.',
       ],
-      'code':
-          '''import 'dart:io';
+      'code': r'''import 'dart:io';
 
 void main() {
   stdout.write('Masukkan nama: ');
@@ -208,8 +207,7 @@ print(hasilBenar); // 13''',
         'Property menyimpan data objek.',
         'Method mendefinisikan perilaku objek.',
       ],
-      'code':
-          '''class Siswa {
+      'code': r'''class Siswa {
   String nama;
 
   Siswa(this.nama);

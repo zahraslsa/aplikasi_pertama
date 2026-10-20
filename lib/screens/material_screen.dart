@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'material_detail_screen.dart';
 import '../theme/app_colors.dart';
 
 class MaterialScreen extends StatelessWidget {
@@ -188,13 +189,13 @@ class MaterialScreen extends StatelessWidget {
     BuildContext context,
     Map<String, dynamic> material,
   ) {
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
       onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Materi ${material['title']} akan dibuka pada tahap berikutnya.',
-            ),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MaterialDetailScreen(material: material),
           ),
         );
       },
