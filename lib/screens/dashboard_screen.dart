@@ -37,23 +37,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: _selectedIndex == 0
           ? AppBar(
-        title: const Text(
-          'CODIFY',
-          style: TextStyle(
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.5,
-            color: AppColors.primary,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => setState(() => _selectedIndex = 3),
-            icon: const Icon(Icons.account_circle_outlined),
-            tooltip: 'Profil',
-          ),
-          const SizedBox(width: 8),
-        ],
-      )
+              title: const Text(
+                'CODIFY',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.5,
+                  color: AppColors.primary,
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () => setState(() => _selectedIndex = 3),
+                  icon: const Icon(Icons.account_circle_outlined),
+                  tooltip: 'Profil',
+                ),
+                const SizedBox(width: 8),
+              ],
+            )
           : null,
       body: IndexedStack(
         index: _selectedIndex,
@@ -101,167 +101,167 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildHomeContent(BuildContext context) {
     return SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder<Map<String, String>>(
-              future: _profile,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text(
-                    'Profil gagal dimuat: ${snapshot.error}',
-                    style: const TextStyle(color: AppColors.error),
-                  );
-                }
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FutureBuilder<Map<String, String>>(
+            future: _profile,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
                 return Text(
-                  'Halo, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
-                  style: const TextStyle(
-                    fontSize: 25,
+                  'Profil gagal dimuat: ${snapshot.error}',
+                  style: const TextStyle(color: AppColors.error),
+                );
+              }
+              return Text(
+                'Halo, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Siap meningkatkan kemampuan coding-mu hari ini?',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+              height: 1.5,
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          _buildProgressCard(context),
+
+          const SizedBox(height: 28),
+
+          // Tes diagnostik
+          const Text(
+            'Mulai Belajar',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: AppColors.primaryLight,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.psychology_alt_rounded,
+                  size: 34,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Tes Diagnostik',
+                  style: TextStyle(
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Siap meningkatkan kemampuan coding-mu hari ini?',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-                height: 1.5,
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            _buildProgressCard(context),
-
-            const SizedBox(height: 28),
-
-            // Tes diagnostik
-            const Text(
-              'Mulai Belajar',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 14),
-
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: AppColors.primaryLight,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.psychology_alt_rounded,
-                    size: 34,
-                    color: AppColors.primary,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Kenali kemampuan awalmu melalui 25 soal '
+                  'dasar pemrograman dan temukan materi yang '
+                  'perlu kamu pelajari.',
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.5,
+                    color: AppColors.textSecondary,
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Tes Diagnostik',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DiagnosticScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.play_arrow_rounded),
+                    label: const Text('Mulai Tes'),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Kenali kemampuan awalmu melalui 25 soal '
-                    'dasar pemrograman dan temukan materi yang '
-                    'perlu kamu pelajari.',
-                    style: TextStyle(
-                      fontSize: 13,
-                      height: 1.5,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DiagnosticScreen(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.play_arrow_rounded),
-                      label: const Text('Mulai Tes'),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            const SizedBox(height: 28),
+          const SizedBox(height: 28),
 
-            // Daftar materi
-            const Text(
-              'Materi Pemrograman',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
+          // Daftar materi
+          const Text(
+            'Materi Pemrograman',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
             ),
-            const SizedBox(height: 6),
-            const Text(
-              'Pelajari dasar pemrograman secara bertahap.',
-              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: 16),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Pelajari dasar pemrograman secara bertahap.',
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+          ),
+          const SizedBox(height: 16),
 
-            _buildMaterialCard(
-              icon: Icons.account_tree_outlined,
-              title: 'Algoritma & Flowchart',
-              subtitle: 'Mengenal langkah penyelesaian masalah.',
-              number: '01',
-            ),
-            _buildMaterialCard(
-              icon: Icons.data_object_rounded,
-              title: 'Variabel & Tipe Data',
-              subtitle: 'Memahami penyimpanan data.',
-              number: '02',
-            ),
-            _buildMaterialCard(
-              icon: Icons.calculate_outlined,
-              title: 'Operator',
-              subtitle: 'Mempelajari operasi dalam program.',
-              number: '03',
-            ),
-            _buildMaterialCard(
-              icon: Icons.alt_route_rounded,
-              title: 'Percabangan',
-              subtitle: 'Membuat keputusan berdasarkan kondisi.',
-              number: '04',
-            ),
-            _buildMaterialCard(
-              icon: Icons.loop_rounded,
-              title: 'Perulangan',
-              subtitle: 'Menjalankan instruksi secara berulang.',
-              number: '05',
-            ),
-            OutlinedButton.icon(
-              onPressed: () => setState(() => _selectedIndex = 1),
-              icon: const Icon(Icons.menu_book_rounded),
-              label: const Text('Lihat Semua 12 Materi'),
-            ),
-          ],
-        ),
-      );
+          _buildMaterialCard(
+            icon: Icons.account_tree_outlined,
+            title: 'Algoritma & Flowchart',
+            subtitle: 'Mengenal langkah penyelesaian masalah.',
+            number: '01',
+          ),
+          _buildMaterialCard(
+            icon: Icons.data_object_rounded,
+            title: 'Variabel & Tipe Data',
+            subtitle: 'Memahami penyimpanan data.',
+            number: '02',
+          ),
+          _buildMaterialCard(
+            icon: Icons.calculate_outlined,
+            title: 'Operator',
+            subtitle: 'Mempelajari operasi dalam program.',
+            number: '03',
+          ),
+          _buildMaterialCard(
+            icon: Icons.alt_route_rounded,
+            title: 'Percabangan',
+            subtitle: 'Membuat keputusan berdasarkan kondisi.',
+            number: '04',
+          ),
+          _buildMaterialCard(
+            icon: Icons.loop_rounded,
+            title: 'Perulangan',
+            subtitle: 'Menjalankan instruksi secara berulang.',
+            number: '05',
+          ),
+          OutlinedButton.icon(
+            onPressed: () => setState(() => _selectedIndex = 1),
+            icon: const Icon(Icons.menu_book_rounded),
+            label: const Text('Lihat Semua 12 Materi'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildProgressCard(BuildContext context) {
@@ -278,8 +278,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final count = snapshot.data!.length;
-        final progress = count / MaterialScreen.allMaterials.length;
+        final total = MaterialScreen.allMaterials.length;
+        final count = MaterialScreen.allMaterials
+            .where(
+              (material) =>
+                  snapshot.data!.contains(material['number'] as String),
+            )
+            .length;
+        final progress = total == 0 ? 0.0 : count / total;
         return InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () => setState(() => _selectedIndex = 2),
@@ -339,8 +345,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 12),
                 Text(
                   count == 0
-                      ? 'Mulai belajar untuk melihat perkembanganmu.'
-                      : '$count dari 12 materi selesai. Ketuk untuk melihat progres.',
+                      ? '0 dari $total materi selesai. Mulai belajar untuk melihat perkembanganmu.'
+                      : '$count dari $total materi selesai. Ketuk untuk melihat progres.',
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ],
@@ -359,8 +365,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push<void>(
           context,
           MaterialPageRoute(
             builder: (context) => MaterialDetailScreen(
@@ -368,60 +374,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         );
+        if (mounted) {
+          setState(_reloadHomeData);
+        }
       },
       child: Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.primaryLight,
-              borderRadius: BorderRadius.circular(14),
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(icon, color: AppColors.primary, size: 25),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 25),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
+                  const SizedBox(height: 5),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Text(
-            number,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
+            Text(
+              number,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }

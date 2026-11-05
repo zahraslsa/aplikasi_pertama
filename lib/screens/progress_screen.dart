@@ -96,8 +96,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
           }
 
           final data = snapshot.data!;
-          final completedCount = data.completedMaterials.length;
-          final progress = completedCount / MaterialScreen.allMaterials.length;
+          final totalMaterials = MaterialScreen.allMaterials.length;
+          final completedCount = MaterialScreen.allMaterials
+              .where(
+                (material) =>
+                    data.completedMaterials.contains(material['number']),
+              )
+              .length;
+          final progress = totalMaterials == 0
+              ? 0.0
+              : completedCount / totalMaterials;
           final averagePracticeScore = data.practiceHistory.isEmpty
               ? 0
               : (data.practiceHistory.fold<int>(
@@ -139,7 +147,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '$completedCount dari ${MaterialScreen.allMaterials.length}',
+                      '$completedCount dari $totalMaterials',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 30,
@@ -222,14 +230,17 @@ class _ProgressScreenState extends State<ProgressScreen> {
                           : 'Materi dipilih dari kompetensi dengan nilai terendah pada tes terakhir.',
                     ),
                     trailing: const Icon(Icons.chevron_right_rounded),
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      await Navigator.push<void>(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
                               MaterialDetailScreen(material: recommendation),
                         ),
-                      ).then((_) => _reload());
+                      );
+                      if (mounted) {
+                        _reload();
+                      }
                     },
                   ),
                 ),

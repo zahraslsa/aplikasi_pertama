@@ -1,5 +1,6 @@
 import 'package:aplikasi_pertama/data/learning_store.dart';
 import 'package:aplikasi_pertama/main.dart';
+import 'package:aplikasi_pertama/screens/dashboard_screen.dart';
 import 'package:aplikasi_pertama/screens/diagnostic_question_screen.dart';
 import 'package:aplikasi_pertama/screens/diagnostic_result_screen.dart';
 import 'package:aplikasi_pertama/screens/history_screen.dart';
@@ -181,6 +182,7 @@ void main() {
   testWidgets('progress shows stored learning data and opens history', (
     tester,
   ) async {
+    await LearningStore.markMaterialCompleted('01');
     await LearningStore.saveDiagnosticResult(
       overallScore: 40,
       topicScores: const {
@@ -201,6 +203,8 @@ void main() {
 
     await tester.pumpWidget(const MaterialApp(home: ProgressScreen()));
     await tester.pumpAndSettle();
+    expect(find.text('1 dari 12'), findsOneWidget);
+    expect(find.text('8% progres belajar'), findsOneWidget);
     expect(find.text('Operator'), findsOneWidget);
     expect(find.text('1'), findsOneWidget);
 
@@ -210,6 +214,28 @@ void main() {
     expect(find.byType(HistoryScreen), findsOneWidget);
     expect(find.text('Tes Diagnostik'), findsOneWidget);
     expect(find.text('Latihan Algoritma & Flowchart'), findsOneWidget);
+  });
+
+  testWidgets('dashboard progress updates after completing a material', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.text('Algoritma & Flowchart').first);
+    await tester.tap(find.text('Algoritma & Flowchart').first);
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Tandai Materi Selesai'));
+    await tester.tap(find.text('Tandai Materi Selesai'));
+    await tester.pumpAndSettle();
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('8%'), findsOneWidget);
+    expect(
+      find.text('1 dari 12 materi selesai. Ketuk untuk melihat progres.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('profile form saves learner information locally', (tester) async {
