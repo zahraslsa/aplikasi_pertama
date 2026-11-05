@@ -3,110 +3,25 @@ import 'package:flutter/material.dart';
 import 'material_detail_screen.dart';
 import '../theme/app_colors.dart';
 
-class MaterialScreen extends StatelessWidget {
-  const MaterialScreen({super.key});
+class _MaterialScreenState extends State<MaterialScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
-  static const List<Map<String, dynamic>> basicMaterials = [
-    {
-      'number': '01',
-      'title': 'Algoritma & Flowchart',
-      'subtitle': 'Dasar penyelesaian masalah dan diagram alir.',
-      'icon': Icons.account_tree_outlined,
-    },
-    {
-      'number': '02',
-      'title': 'Variabel & Tipe Data',
-      'subtitle': 'Mengenal variabel dan berbagai jenis data.',
-      'icon': Icons.data_object_rounded,
-    },
-    {
-      'number': '03',
-      'title': 'Operator',
-      'subtitle': 'Operasi aritmatika, perbandingan, dan logika.',
-      'icon': Icons.calculate_outlined,
-    },
-    {
-      'number': '04',
-      'title': 'Percabangan',
-      'subtitle': 'Pengambilan keputusan berdasarkan kondisi.',
-      'icon': Icons.alt_route_rounded,
-    },
-    {
-      'number': '05',
-      'title': 'Perulangan',
-      'subtitle': 'Menjalankan instruksi secara berulang.',
-      'icon': Icons.loop_rounded,
-    },
-  ];
-
-  static const List<Map<String, dynamic>> additionalMaterials = [
-    {
-      'number': '06',
-      'title': 'Array',
-      'subtitle': 'Menyimpan dan mengelola kumpulan data.',
-      'icon': Icons.view_list_rounded,
-    },
-    {
-      'number': '07',
-      'title': 'Function / Method',
-      'subtitle': 'Membuat kode yang terstruktur dan dapat digunakan kembali.',
-      'icon': Icons.functions_rounded,
-    },
-    {
-      'number': '08',
-      'title': 'String & Manipulasi Data',
-      'subtitle': 'Mengolah teks dan data dalam program.',
-      'icon': Icons.text_fields_rounded,
-    },
-    {
-      'number': '09',
-      'title': 'Input & Output',
-      'subtitle': 'Menerima masukan dan menampilkan keluaran program.',
-      'icon': Icons.input_rounded,
-    },
-    {
-      'number': '10',
-      'title': 'Debugging',
-      'subtitle': 'Menemukan dan memperbaiki kesalahan pada program.',
-      'icon': Icons.bug_report_outlined,
-    },
-    {
-      'number': '11',
-      'title': 'OOP Dasar',
-      'subtitle': 'Mengenal konsep dasar pemrograman berorientasi objek.',
-      'icon': Icons.category_outlined,
-    },
-    {
-      'number': '12',
-      'title': 'Studi Kasus Pemrograman',
-      'subtitle': 'Menerapkan konsep pemrograman pada kasus sederhana.',
-      'icon': Icons.code_rounded,
-    },
-  ];
-
-  static List<Map<String, dynamic>> get allMaterials => [
-    ...basicMaterials,
-    ...additionalMaterials,
-  ];
-
-  static Map<String, dynamic> materialForNumber(String number) {
-    return allMaterials.firstWhere(
-      (material) => material['number'] == number,
-      orElse: () => throw ArgumentError.value(number, 'number'),
-    );
-  }
-
-  static Map<String, dynamic> materialForTopic(String topic) {
-    for (final material in basicMaterials) {
-      if (material['title'] == topic) {
-        return material;
-      }
-    }
-    throw ArgumentError.value(topic, 'topic');
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final query = _searchQuery.trim().toLowerCase();
+    final matchingMaterials = MaterialScreen.allMaterials.where((material) {
+      final title = (material['title'] as String).toLowerCase();
+      final keywords = (material['subtitle'] as String).toLowerCase();
+      return title.contains(query) || keywords.contains(query);
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Materi Pembelajaran')),
       body: SingleChildScrollView(
@@ -118,51 +33,114 @@ class MaterialScreen extends StatelessWidget {
 
             const SizedBox(height: 28),
 
-            const Text(
-              'Dasar Pemrograman',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+            TextField(
+              key: const ValueKey('material-search-field'),
+              controller: _searchController,
+              onChanged: (value) => setState(() => _searchQuery = value),
+              decoration: InputDecoration(
+                hintText: 'Cari judul atau kata kunci materi',
+                prefixIcon: const Icon(Icons.search_rounded),
+                suffixIcon: _searchQuery.isEmpty
+                    ? null
+                    : IconButton(
+                        tooltip: 'Hapus pencarian',
+                        icon: const Icon(Icons.close_rounded),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _searchQuery = '');
+                        },
+                      ),
+                filled: true,
+                fillColor: AppColors.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: AppColors.border),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: AppColors.border),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: AppColors.primary),
+                ),
               ),
-            ),
-
-            const SizedBox(height: 6),
-
-            const Text(
-              'Pelajari konsep dasar pemrograman secara bertahap.',
-              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-            ),
-
-            const SizedBox(height: 16),
-
-            ...basicMaterials.map(
-              (material) => _buildMaterialCard(context, material),
             ),
 
             const SizedBox(height: 20),
 
-            const Text(
-              'Materi Pengayaan',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+            if (query.isNotEmpty) ...[
+              if (matchingMaterials.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24),
+                  child: Center(
+                    child: Text(
+                      'Materi tidak ditemukan',
+                      style: TextStyle(color: AppColors.textSecondary),
+                    ),
+                  ),
+                )
+              else ...[
+                const Text(
+                  'Hasil Pencarian',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ...matchingMaterials.map(
+                  (material) => _buildMaterialCard(context, material),
+                ),
+              ],
+            ] else ...[
+              const Text(
+                'Dasar Pemrograman',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
-            ),
 
-            const SizedBox(height: 6),
+              const SizedBox(height: 6),
 
-            const Text(
-              'Perluas pemahamanmu dengan materi lanjutan.',
-              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-            ),
+              const Text(
+                'Pelajari konsep dasar pemrograman secara bertahap.',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            ...additionalMaterials.map(
-              (material) => _buildMaterialCard(context, material),
-            ),
+              ...MaterialScreen.basicMaterials.map(
+                (material) => _buildMaterialCard(context, material),
+              ),
+
+              const SizedBox(height: 20),
+
+              const Text(
+                'Materi Pengayaan',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              const Text(
+                'Perluas pemahamanmu dengan materi lanjutan.',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
+
+              const SizedBox(height: 16),
+
+              ...MaterialScreen.additionalMaterials.map(
+                (material) => _buildMaterialCard(context, material),
+              ),
+            ],
           ],
         ),
       ),
@@ -290,5 +268,111 @@ class MaterialScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MaterialScreen extends StatefulWidget {
+  const MaterialScreen({super.key});
+
+  @override
+  State<MaterialScreen> createState() => _MaterialScreenState();
+
+  static const List<Map<String, dynamic>> basicMaterials = [
+    {
+      'number': '01',
+      'title': 'Algoritma & Flowchart',
+      'subtitle': 'Dasar penyelesaian masalah dan diagram alir.',
+      'icon': Icons.account_tree_outlined,
+    },
+    {
+      'number': '02',
+      'title': 'Variabel & Tipe Data',
+      'subtitle': 'Mengenal variabel dan berbagai jenis data.',
+      'icon': Icons.data_object_rounded,
+    },
+    {
+      'number': '03',
+      'title': 'Operator',
+      'subtitle': 'Operasi aritmatika, perbandingan, dan logika.',
+      'icon': Icons.calculate_outlined,
+    },
+    {
+      'number': '04',
+      'title': 'Percabangan',
+      'subtitle': 'Pengambilan keputusan berdasarkan kondisi.',
+      'icon': Icons.alt_route_rounded,
+    },
+    {
+      'number': '05',
+      'title': 'Perulangan',
+      'subtitle': 'Menjalankan instruksi secara berulang.',
+      'icon': Icons.loop_rounded,
+    },
+  ];
+
+  static const List<Map<String, dynamic>> additionalMaterials = [
+    {
+      'number': '06',
+      'title': 'Array',
+      'subtitle': 'Menyimpan dan mengelola kumpulan data.',
+      'icon': Icons.view_list_rounded,
+    },
+    {
+      'number': '07',
+      'title': 'Function / Method',
+      'subtitle': 'Membuat kode yang terstruktur dan dapat digunakan kembali.',
+      'icon': Icons.functions_rounded,
+    },
+    {
+      'number': '08',
+      'title': 'String & Manipulasi Data',
+      'subtitle': 'Mengolah teks dan data dalam program.',
+      'icon': Icons.text_fields_rounded,
+    },
+    {
+      'number': '09',
+      'title': 'Input & Output',
+      'subtitle': 'Menerima masukan dan menampilkan keluaran program.',
+      'icon': Icons.input_rounded,
+    },
+    {
+      'number': '10',
+      'title': 'Debugging',
+      'subtitle': 'Menemukan dan memperbaiki kesalahan pada program.',
+      'icon': Icons.bug_report_outlined,
+    },
+    {
+      'number': '11',
+      'title': 'OOP Dasar',
+      'subtitle': 'Mengenal konsep dasar pemrograman berorientasi objek.',
+      'icon': Icons.category_outlined,
+    },
+    {
+      'number': '12',
+      'title': 'Studi Kasus Pemrograman',
+      'subtitle': 'Menerapkan konsep pemrograman pada kasus sederhana.',
+      'icon': Icons.code_rounded,
+    },
+  ];
+
+  static List<Map<String, dynamic>> get allMaterials => [
+    ...basicMaterials,
+    ...additionalMaterials,
+  ];
+
+  static Map<String, dynamic> materialForNumber(String number) {
+    return allMaterials.firstWhere(
+      (material) => material['number'] == number,
+      orElse: () => throw ArgumentError.value(number, 'number'),
+    );
+  }
+
+  static Map<String, dynamic> materialForTopic(String topic) {
+    for (final material in basicMaterials) {
+      if (material['title'] == topic) {
+        return material;
+      }
+    }
+    throw ArgumentError.value(topic, 'topic');
   }
 }

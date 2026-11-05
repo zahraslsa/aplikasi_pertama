@@ -93,6 +93,45 @@ void main() {
     expect(find.text('Materi 03'), findsOneWidget);
   });
 
+  testWidgets('material search filters locally and keeps detail navigation', (
+    tester,
+  ) async {
+    final materialCount = MaterialScreen.allMaterials.length;
+
+    await tester.pumpWidget(const MaterialApp(home: MaterialScreen()));
+    await tester.pumpAndSettle();
+
+    final searchField = find.byKey(const ValueKey('material-search-field'));
+    expect(find.text('Algoritma & Flowchart'), findsOneWidget);
+    expect(find.text('Studi Kasus Pemrograman'), findsOneWidget);
+
+    await tester.enterText(searchField, 'FLOWCHART');
+    await tester.pumpAndSettle();
+    expect(find.text('Algoritma & Flowchart'), findsOneWidget);
+    expect(find.text('Variabel & Tipe Data'), findsNothing);
+
+    await tester.enterText(searchField, 'diagram alir');
+    await tester.pumpAndSettle();
+    expect(find.text('Algoritma & Flowchart'), findsOneWidget);
+
+    await tester.enterText(searchField, 'tidak ada materi');
+    await tester.pumpAndSettle();
+    expect(find.text('Materi tidak ditemukan'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Hapus pencarian'));
+    await tester.pumpAndSettle();
+    expect(find.text('Materi tidak ditemukan'), findsNothing);
+    expect(find.text('Studi Kasus Pemrograman'), findsOneWidget);
+
+    await tester.enterText(searchField, 'operator');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Operator'));
+    await tester.pumpAndSettle();
+    expect(find.byType(MaterialDetailScreen), findsOneWidget);
+    expect(find.text('Materi 03'), findsOneWidget);
+    expect(MaterialScreen.allMaterials, hasLength(materialCount));
+  });
+
   testWidgets('diagnostic saves results after all 25 questions', (
     tester,
   ) async {
