@@ -21,7 +21,9 @@ void main() {
   testWidgets('home connects to material list and interactive practice', (
     tester,
   ) async {
-    await tester.pumpWidget(const CodifyApp());
+    await tester.pumpWidget(
+      const CodifyApp(key: ValueKey('reopened-after-completion')),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('CODIFY'), findsOneWidget);
@@ -159,6 +161,41 @@ void main() {
     await tester.tap(find.text('Algoritma & Flowchart').first);
     await tester.pumpAndSettle();
     expect(find.text('Materi sudah ditandai selesai'), findsOneWidget);
+
+    await tester.pumpWidget(
+      const CodifyApp(key: ValueKey('reopened-after-cancellation')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('8%'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.menu_book_outlined));
+    await tester.pumpAndSettle();
+    expect(find.text('Selesai'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.bar_chart_rounded));
+    await tester.pumpAndSettle();
+    expect(find.text('1 dari 12'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.menu_book_outlined));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Algoritma & Flowchart').first);
+    await tester.pumpAndSettle();
+    expect(find.text('Materi sudah ditandai selesai'), findsOneWidget);
+
+    await tester.ensureVisible(find.text('Batalkan Status Selesai'));
+    await tester.tap(find.text('Batalkan Status Selesai'));
+    await tester.pumpAndSettle();
+    expect(find.text('Tandai Materi Selesai'), findsOneWidget);
+    expect(await LearningStore.getCompletedMaterials(), isEmpty);
+
+    await tester.pumpWidget(const CodifyApp());
+    await tester.pumpAndSettle();
+    expect(find.text('0%'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.menu_book_outlined));
+    await tester.pumpAndSettle();
+    expect(find.text('Selesai'), findsNothing);
+    await tester.tap(find.byIcon(Icons.bar_chart_rounded));
+    await tester.pumpAndSettle();
+    expect(find.text('0 dari 12'), findsOneWidget);
   });
 
   testWidgets('diagnostic saves results after all 25 questions', (

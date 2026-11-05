@@ -66,13 +66,31 @@ class LearningStore {
 
   static Future<void> markMaterialCompleted(String materialNumber) async {
     final preferences = await SharedPreferences.getInstance();
-    final completed = preferences.getStringList(_completedMaterialsKey) ?? [];
-    if (completed.contains(materialNumber)) {
+    final completed = (preferences.getStringList(_completedMaterialsKey) ?? [])
+        .toSet();
+    if (!completed.add(materialNumber)) {
       return;
     }
-    completed.add(materialNumber);
-    if (!await preferences.setStringList(_completedMaterialsKey, completed)) {
+    if (!await preferences.setStringList(
+      _completedMaterialsKey,
+      completed.toList(),
+    )) {
       throw StateError('Progres materi tidak berhasil disimpan.');
+    }
+  }
+
+  static Future<void> unmarkMaterialCompleted(String materialNumber) async {
+    final preferences = await SharedPreferences.getInstance();
+    final completed = (preferences.getStringList(_completedMaterialsKey) ?? [])
+        .toSet();
+    if (!completed.remove(materialNumber)) {
+      return;
+    }
+    if (!await preferences.setStringList(
+      _completedMaterialsKey,
+      completed.toList(),
+    )) {
+      throw StateError('Progres materi tidak berhasil diperbarui.');
     }
   }
 

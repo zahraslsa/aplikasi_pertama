@@ -455,12 +455,15 @@ class _MaterialLearningActionsState extends State<MaterialLearningActions> {
     _completedMaterials = LearningStore.getCompletedMaterials();
   }
 
-  Future<void> _markCompleted() async {
+  Future<void> _setCompletion(bool isCompleted) async {
     setState(() => _isSaving = true);
     try {
-      await LearningStore.markMaterialCompleted(
-        widget.material['number'] as String,
-      );
+      final materialNumber = widget.material['number'] as String;
+      if (isCompleted) {
+        await LearningStore.unmarkMaterialCompleted(materialNumber);
+      } else {
+        await LearningStore.markMaterialCompleted(materialNumber);
+      }
       if (!mounted) {
         return;
       }
@@ -475,7 +478,7 @@ class _MaterialLearningActionsState extends State<MaterialLearningActions> {
       setState(() => _isSaving = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Progres materi tidak berhasil disimpan: $error'),
+          content: Text('Progres materi tidak berhasil diperbarui: $error'),
         ),
       );
     }
@@ -520,14 +523,25 @@ class _MaterialLearningActionsState extends State<MaterialLearningActions> {
               widget.material['number'],
             );
             if (isCompleted) {
-              return const ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Icon(Icons.check_circle, color: AppColors.success),
-                title: Text('Materi sudah ditandai selesai'),
+              return Column(
+                children: [
+                  const ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.check_circle, color: AppColors.success),
+                    title: Text('Materi sudah ditandai selesai'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: _isSaving ? null : () => _setCompletion(true),
+                    icon: const Icon(Icons.undo_rounded),
+                    label: Text(
+                      _isSaving ? 'Memperbarui...' : 'Batalkan Status Selesai',
+                    ),
+                  ),
+                ],
               );
             }
             return OutlinedButton.icon(
-              onPressed: _isSaving ? null : _markCompleted,
+              onPressed: _isSaving ? null : () => _setCompletion(false),
               icon: const Icon(Icons.check_circle_outline_rounded),
               label: Text(_isSaving ? 'Menyimpan...' : 'Tandai Materi Selesai'),
             );
