@@ -132,6 +132,34 @@ void main() {
     expect(MaterialScreen.allMaterials, hasLength(materialCount));
   });
 
+  testWidgets('material completion persists and updates the list card', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: MaterialScreen()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Algoritma & Flowchart').first);
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.text('Tandai Materi Selesai'));
+    await tester.tap(find.text('Tandai Materi Selesai'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Materi sudah ditandai selesai'), findsOneWidget);
+    expect(await LearningStore.getCompletedMaterials(), {'01'});
+
+    await LearningStore.markMaterialCompleted('01');
+    expect(await LearningStore.getCompletedMaterials(), {'01'});
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Selesai'), findsOneWidget);
+
+    await tester.tap(find.text('Algoritma & Flowchart').first);
+    await tester.pumpAndSettle();
+    expect(find.text('Materi sudah ditandai selesai'), findsOneWidget);
+  });
+
   testWidgets('diagnostic saves results after all 25 questions', (
     tester,
   ) async {

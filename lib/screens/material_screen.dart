@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../data/learning_store.dart';
 import 'material_detail_screen.dart';
 import '../theme/app_colors.dart';
 
 class _MaterialScreenState extends State<MaterialScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  late Future<Set<String>> _completedMaterials;
+
+  @override
+  void initState() {
+    super.initState();
+    _completedMaterials = LearningStore.getCompletedMaterials();
+  }
 
   @override
   void dispose() {
@@ -69,78 +77,111 @@ class _MaterialScreenState extends State<MaterialScreen> {
 
             const SizedBox(height: 20),
 
-            if (query.isNotEmpty) ...[
-              if (matchingMaterials.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: Center(
-                    child: Text(
-                      'Materi tidak ditemukan',
-                      style: TextStyle(color: AppColors.textSecondary),
+            FutureBuilder<Set<String>>(
+              future: _completedMaterials,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text(
+                    'Progres materi gagal dimuat: ${snapshot.error}',
+                    style: const TextStyle(color: AppColors.error),
+                  );
+                }
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final completedMaterials = snapshot.data!;
+                if (query.isNotEmpty) {
+                  if (matchingMaterials.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Center(
+                        child: Text(
+                          'Materi tidak ditemukan',
+                          style: TextStyle(color: AppColors.textSecondary),
+                        ),
+                      ),
+                    );
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Hasil Pencarian',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      ...matchingMaterials.map(
+                        (material) => _buildMaterialCard(
+                          context,
+                          material,
+                          completedMaterials: completedMaterials,
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Dasar Pemrograman',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
-                  ),
-                )
-              else ...[
-                const Text(
-                  'Hasil Pencarian',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ...matchingMaterials.map(
-                  (material) => _buildMaterialCard(context, material),
-                ),
-              ],
-            ] else ...[
-              const Text(
-                'Dasar Pemrograman',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-
-              const SizedBox(height: 6),
-
-              const Text(
-                'Pelajari konsep dasar pemrograman secara bertahap.',
-                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-              ),
-
-              const SizedBox(height: 16),
-
-              ...MaterialScreen.basicMaterials.map(
-                (material) => _buildMaterialCard(context, material),
-              ),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                'Materi Pengayaan',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-
-              const SizedBox(height: 6),
-
-              const Text(
-                'Perluas pemahamanmu dengan materi lanjutan.',
-                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-              ),
-
-              const SizedBox(height: 16),
-
-              ...MaterialScreen.additionalMaterials.map(
-                (material) => _buildMaterialCard(context, material),
-              ),
-            ],
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Pelajari konsep dasar pemrograman secara bertahap.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ...MaterialScreen.basicMaterials.map(
+                      (material) => _buildMaterialCard(
+                        context,
+                        material,
+                        completedMaterials: completedMaterials,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Materi Pengayaan',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Perluas pemahamanmu dengan materi lanjutan.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ...MaterialScreen.additionalMaterials.map(
+                      (material) => _buildMaterialCard(
+                        context,
+                        material,
+                        completedMaterials: completedMaterials,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -186,17 +227,24 @@ class _MaterialScreenState extends State<MaterialScreen> {
 
   Widget _buildMaterialCard(
     BuildContext context,
-    Map<String, dynamic> material,
-  ) {
+    Map<String, dynamic> material, {
+    required Set<String> completedMaterials,
+  }) {
+    final isCompleted = completedMaterials.contains(material['number']);
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push<void>(
           context,
           MaterialPageRoute(
             builder: (context) => MaterialDetailScreen(material: material),
           ),
         );
+        if (mounted) {
+          setState(() {
+            _completedMaterials = LearningStore.getCompletedMaterials();
+          });
+        }
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -254,6 +302,28 @@ class _MaterialScreenState extends State<MaterialScreen> {
                       color: AppColors.textSecondary,
                     ),
                   ),
+                  if (isCompleted) ...[
+                    const SizedBox(height: 6),
+                    const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.check_circle_rounded,
+                          color: AppColors.success,
+                          size: 15,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          'Selesai',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.success,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
