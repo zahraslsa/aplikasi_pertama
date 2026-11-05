@@ -1,138 +1,156 @@
 # CODIFY
 
-**Aplikasi Pembelajaran Adaptif Dasar Pemrograman Berbasis Mobile untuk Siswa Kelas X SMK PPLG**
+CODIFY adalah aplikasi pembelajaran dasar pemrograman berbasis Flutter untuk
+membantu siswa kelas X SMK PPLG mempelajari konsep pemrograman secara bertahap.
+Aplikasi menyediakan tes diagnostik, materi dan latihan, serta pemantauan
+progres belajar. Pencarian materi dilakukan secara lokal dan status materi
+selesai disimpan pada perangkat.
 
-CODIFY merupakan prototipe aplikasi pembelajaran mobile yang dirancang untuk membantu siswa kelas X SMK PPLG mempelajari dasar pemrograman. Aplikasi ini menggabungkan tes diagnostik, hasil tes, materi pembelajaran, latihan, dan pemantauan progres belajar.
+## Tujuan dan Sasaran Pengguna
 
-## Fitur Aplikasi
-
-Fitur berikut didokumentasikan berdasarkan struktur proyek. Pastikan status setiap fitur sudah sesuai dengan hasil pengujian pada emulator sebelum pengumpulan.
-
-- Dashboard sebagai halaman utama.
-- Tes diagnostik dengan 25 soal yang mencakup lima kompetensi.
-- Hasil tes berupa skor keseluruhan dan skor per kompetensi.
-- Daftar materi dan halaman detail materi.
-- Latihan materi.
-- Halaman progres belajar dan riwayat belajar.
-- Halaman profil pengguna.
-
-## Kompetensi Tes Diagnostik
-
-Tes diagnostik dirancang untuk mencakup lima kompetensi dasar pemrograman:
-
-1. Algoritma dan Flowchart
-2. Variabel dan Tipe Data
-3. Operator
-4. Percabangan
-5. Perulangan
-
-Setiap kompetensi memiliki lima soal. Skor kompetensi dihitung sebagai persentase dari 0 sampai 100.
-
-## Materi Pembelajaran
-
-Aplikasi memuat 12 topik materi yang direncanakan:
-
-1. Algoritma dan Flowchart
-2. Variabel dan Tipe Data
-3. Operator
-4. Percabangan
-5. Perulangan
-6. Array
-7. Function/Method
-8. String dan Manipulasi Data
-9. Input dan Output
-10. Debugging
-11. OOP Dasar
-12. Studi Kasus Pemrograman
-
-## Screenshot Aplikasi
-
-Screenshot berikut diambil dari aplikasi yang dijalankan di emulator. Pastikan nama file pada folder `screenshots/` sama persis dengan yang dirujuk di bawah.
-
-### Dashboard
-![Dashboard CODIFY](screenshots/dashboard.png)
-
-### Tes Diagnostik
-![Tes Diagnostik](screenshots/tes-diagnostik.png)
-
-### Soal Diagnostik
-![Soal Diagnostik](screenshots/soal-diagnostik.png)
-
-### Hasil Tes
-![Hasil Tes](screenshots/hasil-tes.png)
-
-### Daftar Materi
-![Daftar Materi](screenshots/daftar-materi.png)
-
-### Detail Materi
-![Detail Materi](screenshots/detail-materi.png)
-
-### Latihan Materi
-![Latihan Materi](screenshots/latihan-materi.png)
-
-### Progres Belajar
-![Progres Belajar](screenshots/progres-belajar.png)
-
-### Riwayat Belajar
-![Riwayat Belajar](screenshots/riwayat-belajar.png)
-
-### Profil
-![Profil CODIFY](screenshots/profil.png)
+CODIFY ditujukan untuk siswa kelas X SMK PPLG sebagai sarana belajar mandiri
+dasar pemrograman. Tes diagnostik membantu mengenali kompetensi yang perlu
+dipelajari, sedangkan materi, latihan, dan progres mendukung proses belajar
+selanjutnya.
 
 ## Teknologi
 
-- Flutter
-- Dart
-- Visual Studio Code
-- Android Emulator
+- Flutter dan Dart.
+- `shared_preferences` untuk menyimpan data aplikasi secara lokal, termasuk
+  status materi yang selesai.
+- `flutter_test` untuk pengujian widget.
 
-CODIFY dikembangkan sebagai prototipe yang dirancang untuk berjalan secara offline. README ini tidak menyatakan bahwa Firebase atau database online sudah digunakan.
+Aplikasi tidak menggunakan Firebase atau backend untuk fitur-fitur tersebut.
 
-## Struktur Proyek
+## Fitur Utama
 
-Struktur ringkas berdasarkan folder proyek:
+- **Dashboard:** akses ke tes diagnostik, materi, dan ringkasan progres belajar.
+- **Tes diagnostik:** 25 soal yang mencakup algoritma dan flowchart, variabel
+  dan tipe data, operator, percabangan, serta perulangan.
+- **Hasil diagnostik:** menampilkan nilai keseluruhan dan kompetensi.
+- **Materi pembelajaran:** 12 materi dasar dan pengayaan, dengan halaman detail
+  serta latihan interaktif.
+- **Pencarian materi:** mencari berdasarkan judul atau deskripsi/kata kunci;
+  hasil diperbarui saat mengetik, tidak membedakan huruf besar dan kecil, dan
+  dapat dihapus menggunakan tombol hapus.
+- **Status selesai:** materi dapat ditandai selesai atau dibatalkan dari halaman
+  detail. Latihan dengan nilai minimal 80 juga menandai materi selesai.
+- **Progres belajar:** Dashboard dan halaman Progres menampilkan jumlah materi
+  selesai, persentase, dan progress bar. Progres dihitung dari materi yang
+  terdaftar dan berstatus selesai.
+- **Riwayat dan profil:** riwayat tes/latihan dan informasi profil dikelola
+  melalui `LearningStore`.
+
+## Penyimpanan Data
+
+`LearningStore` menggunakan `shared_preferences` untuk menyimpan data aplikasi
+secara lokal di perangkat. Daftar materi selesai disimpan sebagai ID materi
+unik, sehingga materi yang sama tidak dihitung lebih dari sekali. Penandaan
+dan pembatalan status memakai penyimpanan yang sama; halaman Dashboard,
+Progres, dan daftar materi memuat status dari sumber tersebut.
+
+Penyimpanan lokal tidak disinkronkan ke perangkat lain atau layanan daring.
+
+## Struktur Folder
 
 ```text
 aplikasi_pertama/
 ├── lib/
-│   ├── data/
-│   ├── screens/
-│   ├── theme/
-│   ├── widgets/
-│   └── main.dart
-├── screenshots/
-│   ├── ai/
-│   ├── dashboard.png
-│   ├── daftar-materi.png
-│   ├── detail-materi.png
-│   ├── hasil-tes.png
-│   ├── latihan-materi.png
-│   ├── profil.png
-│   ├── progres-belajar.png
-│   ├── riwayat-belajar.png
-│   ├── soal-diagnostik.png
-│   └── tes-diagnostik.png
-├── README.md
-└── AI_DECLARATION.md
+│   ├── data/       # Penyimpanan lokal dan data aplikasi
+│   ├── screens/    # Dashboard, materi, latihan, tes, progres, dan halaman lain
+│   ├── theme/      # Tema dan warna CODIFY
+│   ├── widgets/    # Komponen UI yang digunakan kembali
+│   └── main.dart   # Entry point aplikasi
+├── test/           # Widget test dan pengujian aplikasi
+├── screenshots/    # Gambar tampilan aplikasi
+├── android/        # Konfigurasi platform Android
+├── ios/            # Konfigurasi platform iOS
+├── web/            # Konfigurasi platform web
+├── windows/        # Konfigurasi platform Windows
+├── linux/          # Konfigurasi platform Linux
+├── macos/          # Konfigurasi platform macOS
+├── pubspec.yaml    # Konfigurasi project dan dependency
+└── README.md
 ```
 
-## Cara Menjalankan Aplikasi
+## Menjalankan Project
 
-Pastikan Flutter SDK dan Android Emulator sudah terpasang. Jalankan perintah berikut dari terminal pada folder proyek:
+Pasang Flutter SDK yang sesuai dengan batas versi SDK pada `pubspec.yaml`, lalu
+jalankan perintah berikut dari folder project:
 
 ```bash
 flutter pub get
 flutter devices
-flutter run -d emulator-5554 --no-enable-impeller
+flutter run
 ```
 
-Jika ID emulator berbeda, gunakan ID yang ditampilkan oleh `flutter devices`.
-
-Untuk memeriksa kode:
+Pilih atau sambungkan perangkat/emulator yang tersedia. Untuk menjalankan
+pemeriksaan kode dan pengujian:
 
 ```bash
 flutter analyze
+flutter test
 ```
+
+## Pengujian Fitur Secara Manual
+
+### Pencarian Materi
+
+1. Buka tab **Materi**.
+2. Cari judul, misalnya `Array`, lalu coba variasi huruf besar seperti `ARRAY`.
+3. Cari kata dari deskripsi materi, misalnya `diagram alir`.
+4. Masukkan teks yang tidak cocok dan pastikan pesan **Materi tidak ditemukan**
+   muncul.
+5. Tekan tombol hapus di kolom pencarian dan pastikan semua materi kembali
+   ditampilkan.
+6. Pilih hasil untuk memastikan halaman detail tetap terbuka.
+
+### Menandai Materi dan Melihat Progres
+
+1. Buka detail salah satu materi dan tekan **Tandai Materi Selesai**.
+2. Pastikan detail menunjukkan status selesai dan kartu materi menampilkan
+   label **Selesai**.
+3. Kembali ke Dashboard dan halaman **Progres**. Periksa jumlah materi, angka
+   persentase, serta progress bar.
+4. Pada detail materi, tekan **Batalkan Status Selesai** dan pastikan status
+   serta progres berkurang.
+5. Menandai materi yang sama berulang kali seharusnya tetap dihitung sebagai
+   satu materi selesai.
+
+### Memeriksa Penyimpanan Setelah Aplikasi Ditutup
+
+1. Tandai sebuah materi selesai.
+2. Tutup aplikasi sepenuhnya, bukan hanya kembali ke Dashboard.
+3. Buka kembali aplikasi dan periksa status materi, Dashboard, dan halaman
+   Progres.
+4. Batalkan status selesai, tutup dan buka kembali aplikasi, lalu pastikan
+   perubahan juga tetap tersimpan.
+
+Pengujian widget menggunakan `SharedPreferences.setMockInitialValues`, sehingga
+pengujian otomatis memverifikasi pemuatan ulang state di dalam test, bukan
+force close dan pembukaan ulang proses aplikasi native. Langkah di atas perlu
+dilakukan pada perangkat/emulator untuk memverifikasi siklus hidup aplikasi
+yang sebenarnya.
+
+## Hasil Pengujian
+
+Pada pemeriksaan terakhir sebelum dokumentasi ini diperbarui:
+
+- `flutter analyze` selesai tanpa masalah.
+- `flutter test` berhasil; seluruh 10 widget test lulus.
+- Pengujian mencakup pencarian judul/kata kunci dan huruf besar-kecil, hasil
+  pencarian kosong dan pengosongan kolom, penandaan/pembatalan status, status
+  unik, progres Dashboard dan halaman Progres, serta pemuatan ulang menggunakan
+  penyimpanan mock.
+
+Uji force close aplikasi pada perangkat/emulator belum dibuktikan oleh widget
+test dan perlu dilakukan secara manual sesuai langkah di atas.
+
+## Screenshot
+
+Gambar aplikasi tersedia di folder [`screenshots/`](screenshots/), termasuk
+Dashboard, daftar dan detail materi, tes diagnostik, latihan, progres, riwayat,
+dan profil.
 
 ## Repository
 

@@ -123,6 +123,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Hapus pencarian'));
     await tester.pumpAndSettle();
+    expect(tester.widget<TextField>(searchField).controller!.text, isEmpty);
     expect(find.text('Materi tidak ditemukan'), findsNothing);
     expect(find.text('Studi Kasus Pemrograman'), findsOneWidget);
 
@@ -174,6 +175,14 @@ void main() {
     await tester.tap(find.byIcon(Icons.bar_chart_rounded));
     await tester.pumpAndSettle();
     expect(find.text('1 dari 12'), findsOneWidget);
+    expect(
+      tester
+          .widget<LinearProgressIndicator>(
+            find.byType(LinearProgressIndicator).first,
+          )
+          .value,
+      closeTo(1 / 12, 0.0001),
+    );
 
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pumpAndSettle();
@@ -190,12 +199,28 @@ void main() {
     await tester.pumpWidget(const CodifyApp());
     await tester.pumpAndSettle();
     expect(find.text('0%'), findsOneWidget);
+    expect(
+      tester
+          .widget<LinearProgressIndicator>(
+            find.byType(LinearProgressIndicator).first,
+          )
+          .value,
+      0,
+    );
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pumpAndSettle();
     expect(find.text('Selesai'), findsNothing);
     await tester.tap(find.byIcon(Icons.bar_chart_rounded));
     await tester.pumpAndSettle();
     expect(find.text('0 dari 12'), findsOneWidget);
+    expect(
+      tester
+          .widget<LinearProgressIndicator>(
+            find.byType(LinearProgressIndicator).first,
+          )
+          .value,
+      0,
+    );
   });
 
   testWidgets('diagnostic saves results after all 25 questions', (
@@ -242,6 +267,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('1 dari 12'), findsOneWidget);
     expect(find.text('8% progres belajar'), findsOneWidget);
+    expect(
+      tester
+          .widget<LinearProgressIndicator>(
+            find.byType(LinearProgressIndicator).first,
+          )
+          .value,
+      closeTo(1 / 12, 0.0001),
+    );
     expect(find.text('Operator'), findsOneWidget);
     expect(find.text('1'), findsOneWidget);
 
