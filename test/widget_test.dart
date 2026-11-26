@@ -302,6 +302,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('1 dari 12'), findsOneWidget);
     expect(find.text('8% progres belajar'), findsOneWidget);
+    expect(find.text('11 materi belum selesai'), findsOneWidget);
+    expect(find.text('Peta kompetensi'), findsOneWidget);
+    expect(find.text('Nilai dari tes diagnostik terakhir'), findsOneWidget);
+    expect(find.text('0/100'), findsNWidgets(3));
     expect(
       tester
           .widget<LinearProgressIndicator>(
@@ -310,8 +314,27 @@ void main() {
           .value,
       closeTo(1 / 12, 0.0001),
     );
-    expect(find.text('Operator'), findsOneWidget);
     expect(find.text('1'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Langkah pertama'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('Langkah pertama'), findsOneWidget);
+    expect(find.text('Didapat'), findsOneWidget);
+    expect(find.text('Belum terbuka'), findsNWidgets(2));
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('progress-recommendation-tile')),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('progress-recommendation-tile')),
+        matching: find.text('Operator'),
+      ),
+      findsOneWidget,
+    );
 
     await tester.ensureVisible(find.text('Lihat Riwayat Belajar'));
     await tester.tap(find.text('Lihat Riwayat Belajar'));
@@ -319,6 +342,66 @@ void main() {
     expect(find.byType(HistoryScreen), findsOneWidget);
     expect(find.text('Tes Diagnostik'), findsOneWidget);
     expect(find.text('Latihan Algoritma & Flowchart'), findsOneWidget);
+  });
+
+  testWidgets('progress achievements unlock at completed-material milestones', (
+    tester,
+  ) async {
+    for (final number in ['01', '02', '03', '04']) {
+      await LearningStore.markMaterialCompleted(number);
+    }
+
+    await tester.pumpWidget(
+      const MaterialApp(home: ProgressScreen(key: ValueKey('four-complete'))),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Langkah pertama'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('Didapat'), findsOneWidget);
+    expect(find.text('Belum terbuka'), findsNWidgets(2));
+
+    await LearningStore.markMaterialCompleted('05');
+    await tester.pumpWidget(
+      const MaterialApp(home: ProgressScreen(key: ValueKey('five-complete'))),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Langkah pertama'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('Didapat'), findsNWidgets(2));
+    expect(find.text('Belum terbuka'), findsOneWidget);
+
+    for (final number in ['06', '07', '08', '09', '10', '11', '12']) {
+      await LearningStore.markMaterialCompleted(number);
+    }
+    await tester.pumpWidget(
+      const MaterialApp(home: ProgressScreen(key: ValueKey('all-complete'))),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Langkah pertama'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('Didapat'), findsNWidgets(3));
+    expect(find.text('Belum terbuka'), findsNothing);
+  });
+
+  testWidgets('progress dashboard fits a narrow screen', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const MaterialApp(home: ProgressScreen()));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('dashboard progress updates after completing a material', (
@@ -347,12 +430,32 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
     await tester.pumpAndSettle();
 
+    expect(find.text('SC'), findsNothing);
     await tester.enterText(find.byType(TextField).first, 'Zahra PPLG');
+    expect(find.text('ZP'), findsNothing);
+    await tester.dragUntilVisible(
+      find.text('Simpan Profil'),
+      find.byType(ListView),
+      const Offset(0, -250),
+    );
     await tester.tap(find.text('Simpan Profil'));
     await tester.pumpAndSettle();
 
     expect((await LearningStore.getProfile())['name'], 'Zahra PPLG');
+    expect(find.text('ZP'), findsOneWidget);
     expect(find.text('Profil berhasil disimpan di perangkat.'), findsOneWidget);
+  });
+
+  testWidgets('profile layout fits a narrow screen', (tester) async {
+    tester.view.physicalSize = const Size(320, 760);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
   });
 
   test('all 12 materials provide valid interactive practice', () {

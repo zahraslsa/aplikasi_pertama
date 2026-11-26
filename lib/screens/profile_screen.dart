@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
 import '../widgets/codify_button.dart';
+import '../widgets/codify_mascot.dart';
 import 'history_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -107,68 +108,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
             children: [
+              _buildProfileHeader(snapshot.data!),
+              const SizedBox(height: 22),
               Container(
-                padding: const EdgeInsets.all(22),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border),
                 ),
-                child: const Column(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 36,
-                      backgroundColor: AppColors.primary,
-                      child: Icon(
-                        Icons.person_rounded,
-                        color: AppColors.softWhite,
-                        size: 40,
-                      ),
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.edit_note_rounded,
+                          color: AppColors.dustyBlue,
+                          size: 23,
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Informasi profil',
+                            style: TextStyle(
+                              color: AppColors.textPrimary,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      'Profil Belajar CODIFY',
-                      style: TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    const SizedBox(height: 18),
+                    _buildField(
+                      label: 'Nama Lengkap',
+                      controller: _nameController,
+                      icon: Icons.badge_outlined,
                     ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Data ini hanya disimpan di perangkat.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 13,
-                      ),
+                    const SizedBox(height: 14),
+                    _buildField(
+                      label: 'Username',
+                      controller: _usernameController,
+                      icon: Icons.person_outline_rounded,
+                    ),
+                    const SizedBox(height: 14),
+                    _buildField(
+                      label: 'Email',
+                      controller: _emailController,
+                      icon: Icons.email_outlined,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 14),
+                    _buildField(
+                      label: 'Kelas',
+                      controller: _classController,
+                      icon: Icons.school_outlined,
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 24),
-              _buildField(
-                label: 'Nama Lengkap',
-                controller: _nameController,
-                icon: Icons.badge_outlined,
-              ),
-              const SizedBox(height: 16),
-              _buildField(
-                label: 'Username',
-                controller: _usernameController,
-                icon: Icons.person_outline_rounded,
-              ),
-              const SizedBox(height: 16),
-              _buildField(
-                label: 'Email',
-                controller: _emailController,
-                icon: Icons.email_outlined,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 16),
-              _buildField(
-                label: 'Kelas',
-                controller: _classController,
-                icon: Icons.school_outlined,
               ),
               const SizedBox(height: 24),
               CodifyButton(
@@ -194,6 +192,164 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
     );
+  }
+
+  Widget _buildProfileHeader(Map<String, String> profile) {
+    final name = profile['name']?.trim() ?? '';
+    final username = profile['username']?.trim() ?? '';
+    final className = profile['class']?.trim() ?? '';
+    final initials = _initialsFor(name);
+    final avatar = CircleAvatar(
+      radius: 30,
+      backgroundColor: AppColors.forestGreen,
+      child: initials.isEmpty
+          ? const Icon(
+              Icons.person_outline_rounded,
+              color: AppColors.softWhite,
+              size: 34,
+            )
+          : Text(
+              initials,
+              style: const TextStyle(
+                color: AppColors.softWhite,
+                fontSize: 21,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+    );
+    final identityDetails = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Profil belajar CODIFY',
+          style: TextStyle(
+            color: AppColors.forestGreen,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          name,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: AppColors.darkText,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        if (username.isNotEmpty) ...[
+          const SizedBox(height: 3),
+          Text(
+            '@$username',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 12,
+            ),
+          ),
+        ],
+        if (className.isNotEmpty) ...[
+          const SizedBox(height: 7),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.softTint(AppColors.butterYellow, opacity: 0.4),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              className,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.darkText,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppColors.softTint(AppColors.sageGreen, opacity: 0.34),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.sageGreen.withValues(alpha: 0.55)),
+      ),
+      child: Column(
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 360) {
+                return Row(
+                  children: [
+                    avatar,
+                    const SizedBox(width: 12),
+                    Expanded(child: identityDetails),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  avatar,
+                  const SizedBox(width: 12),
+                  Expanded(child: identityDetails),
+                  const SizedBox(width: 4),
+                  const CodifyMascot(size: 48),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.18),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Row(
+              children: [
+                Icon(
+                  Icons.lock_outline_rounded,
+                  color: AppColors.forestGreen,
+                  size: 17,
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Data profil disimpan di perangkat ini.',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _initialsFor(String name) {
+    final trimmedName = name.trim();
+    if (trimmedName.isEmpty || trimmedName == 'Sobat CODIFY') {
+      return '';
+    }
+
+    final words = trimmedName.split(RegExp(r'\s+'));
+    final initials = [
+      String.fromCharCodes(words.first.runes.take(1)),
+      if (words.length > 1) String.fromCharCodes(words.last.runes.take(1)),
+    ];
+    return initials.join().toUpperCase();
   }
 
   Widget _buildField({
