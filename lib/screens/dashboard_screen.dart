@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
+import '../widgets/codify_mascot.dart';
 import 'material_detail_screen.dart';
 import 'diagnostic_screen.dart';
 import 'material_screen.dart';
@@ -105,24 +106,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FutureBuilder<Map<String, String>>(
-            future: _profile,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text(
-                  'Profil gagal dimuat: ${snapshot.error}',
-                  style: const TextStyle(color: AppColors.error),
-                );
-              }
-              return Text(
-                'Halo, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
-                style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+          Row(
+            children: [
+              Expanded(
+                child: FutureBuilder<Map<String, String>>(
+                  future: _profile,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text(
+                        'Profil gagal dimuat: ${snapshot.error}',
+                        style: const TextStyle(color: AppColors.error),
+                      );
+                    }
+                    return Text(
+                      'Halo, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+              const SizedBox(width: 8),
+              const CodifyMascot(size: 64),
+            ],
           ),
           const SizedBox(height: 8),
           const Text(
