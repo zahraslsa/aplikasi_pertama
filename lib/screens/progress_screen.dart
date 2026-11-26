@@ -194,7 +194,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
               const SizedBox(height: 12),
               SizedBox(
-                height: 160,
+                height: 176,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
@@ -609,7 +609,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
           ),
           const SizedBox(width: 8),
-          const CodifyMascot(size: 68),
+          const CodifyMascot(size: 68, character: CodifyCharacter.byte),
         ],
       ),
     );
@@ -841,17 +841,13 @@ class _AchievementCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: isUnlocked ? accent : AppColors.warmBeige,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: accent.withValues(alpha: isUnlocked ? 0.9 : 0.35),
-                  ),
-                ),
-                child: Icon(icon, color: iconColor, size: 22),
+              CodifyMascot(
+                size: 50,
+                character: title.startsWith('Langkah pertama')
+                    ? CodifyCharacter.zippy
+                    : title.startsWith('Lima materi')
+                    ? CodifyCharacter.byte
+                    : CodifyCharacter.pip,
               ),
               const Spacer(),
               Icon(

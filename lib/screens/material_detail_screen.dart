@@ -28,6 +28,25 @@ print(luas); // 25''',
       'output': "25",
       'exercise': "Ubah contoh agar menghitung luas persegi dengan sisi 8.",
       'hint': "Ganti nilai sisi dan gunakan rumus luas = sisi kali sisi.",
+      'objectives': [
+        "Menguraikan masalah menjadi langkah yang berurutan.",
+        "Membedakan input, proses, dan output.",
+        "Memilih simbol flowchart untuk tiap jenis langkah.",
+      ],
+      'conceptGuide': "Mulailah dengan menuliskan tujuan dan data yang tersedia. Urutkan proses dari awal sampai hasil, lalu gambarkan dengan flowchart: oval untuk mulai atau selesai, jajar genjang untuk input atau output, persegi panjang untuk proses, dan belah ketupat untuk keputusan. Periksa alur dengan contoh data agar setiap jalur berakhir.",
+      'examples': [
+        {
+          'title': "Menentukan bilangan genap atau ganjil",
+          'explanation': "Data angka diperiksa dengan operasi sisa bagi. Jika sisanya 0, alur menuju output Genap; jika tidak, alur menuju output Ganjil.",
+          'code': "int angka = 7;\n\nif (angka % 2 == 0) {\n  print('Genap');\n} else {\n  print('Ganjil');\n}",
+          'output': "Ganjil",
+        },
+      ],
+      'commonMistakes': [
+        "Menulis langkah yang melompat atau tidak menjelaskan input dan hasil.",
+        "Menggunakan simbol proses untuk keputusan yang seharusnya memakai belah ketupat.",
+        "Membuat cabang keputusan tanpa jalur lanjutan yang jelas.",
+      ],
       'summary': [
         'Algoritma harus jelas, logis, dan berurutan.',
         'Flowchart membantu memvisualisasikan alur algoritma.',
@@ -53,6 +72,25 @@ print(umur);''',
       'exercise': "Tambahkan variabel untuk menandai apakah Alya sudah mengikuti kelas.",
       'hint':
           "Gunakan bool dengan nilai true atau false, lalu tampilkan nilainya.",
+      'objectives': [
+        "Membedakan int, double, String, dan bool.",
+        "Membuat nama variabel yang jelas dan memakai nilainya.",
+        "Memilih var, final, atau const sesuai kebutuhan.",
+      ],
+      'conceptGuide': "Dart memiliki tipe statis: tipe nilai perlu cocok dengan tipe variabel. var meminta Dart menyimpulkan tipe dari nilai awal; final hanya dapat diisi sekali saat program berjalan; const dipakai untuk nilai konstan yang diketahui saat kompilasi. Gunakan tipe eksplisit ketika itu membuat maksud program lebih mudah dibaca.",
+      'examples': [
+        {
+          'title': "Menghitung total belanja",
+          'explanation': "Nama barang disimpan sebagai teks, jumlah sebagai bilangan bulat, dan harga dapat memakai pecahan. Perkalian jumlah dan harga menghasilkan total belanja.",
+          'code': "String barang = 'Buku';\nint jumlah = 2;\ndouble hargaSatuan = 12.5;\ndouble total = jumlah * hargaSatuan;\n\nprint('Barang: ' + barang);\nprint('Total: ' + total.toStringAsFixed(1));",
+          'output': "Barang: Buku\nTotal: 25.0",
+        },
+      ],
+      'commonMistakes': [
+        "Memasukkan teks ke variabel int tanpa mengubah atau memeriksa tipenya.",
+        "Memakai nama singkat seperti x untuk data yang maknanya bisa ditulis lebih jelas.",
+        "Mengira final dan const dapat diberi nilai ulang setelah deklarasi.",
+      ],
       'summary': [
         'Nama variabel sebaiknya jelas dan mudah dipahami.',
         'Pilih tipe data sesuai kebutuhan.',
@@ -76,6 +114,25 @@ print(a > b); // true''',
       'output': "13\n1\ntrue",
       'exercise': "Buat pemeriksaan untuk mengetahui apakah angka 14 termasuk bilangan genap.",
       'hint': "Bilangan genap memiliki sisa bagi 2 sama dengan 0.",
+      'objectives': [
+        "Menggunakan operator aritmatika untuk menghitung.",
+        "Membandingkan nilai dan membaca hasil true atau false.",
+        "Menggabungkan kondisi dengan &&, ||, dan !.",
+      ],
+      'conceptGuide': "Operator aritmatika menghasilkan angka, operator perbandingan menghasilkan bool, dan operator logika menggabungkan nilai bool. Di Dart, / menghasilkan double, sedangkan ~/ menghasilkan pembagian bulat; % mengambil sisa bagi. Gunakan tanda kurung saat urutan hitung perlu dibuat lebih mudah dibaca.",
+      'examples': [
+        {
+          'title': "Memeriksa syarat masuk",
+          'explanation': "Operator >= memeriksa usia. Operator && menghasilkan true hanya jika kedua syarat bernilai true.",
+          'code': "int umur = 17;\nbool membawaKartu = true;\nbool bolehMasuk = umur >= 17 && membawaKartu;\n\nprint(bolehMasuk);",
+          'output': "true",
+        },
+      ],
+      'commonMistakes': [
+        "Memakai = untuk membandingkan; gunakan == untuk memeriksa kesamaan.",
+        "Mengira / selalu menghasilkan int; hasil pembagian ini bertipe double.",
+        "Lupa bahwa % menghasilkan sisa bagi, bukan hasil pembagian.",
+      ],
       'summary': [
         'Operator aritmatika digunakan untuk berhitung.',
         'Operator perbandingan dan logika sering digunakan dalam kondisi.',
@@ -99,6 +156,25 @@ if (nilai >= 75) {
       'output': "Lulus",
       'exercise': "Ubah program agar menampilkan Remedial saat nilai di bawah 75 dan Tuntas untuk nilai lainnya.",
       'hint': "Bandingkan nilai dengan 75 pada if, lalu gunakan else untuk kondisi yang tersisa.",
+      'objectives': [
+        "Membuat kondisi yang menghasilkan true atau false.",
+        "Memilih antara if, else if, dan else.",
+        "Menguji nilai batas pada setiap cabang.",
+      ],
+      'conceptGuide': "Program mengevaluasi kondisi dari atas ke bawah. Blok if pertama yang kondisinya true akan dijalankan, sedangkan else menjadi pilihan terakhir. Susun rentang nilai tanpa celah atau tumpang tindih, lalu uji nilai tepat di batas seperti 74, 75, dan 76.",
+      'examples': [
+        {
+          'title': "Mengelompokkan nilai",
+          'explanation': "Kondisi diperiksa berurutan. Nilai 68 tidak mencapai 85 maupun 75, sehingga blok else dijalankan.",
+          'code': "int nilai = 68;\n\nif (nilai >= 85) {\n  print('Sangat baik');\n} else if (nilai >= 75) {\n  print('Lulus');\n} else {\n  print('Remedial');\n}",
+          'output': "Remedial",
+        },
+      ],
+      'commonMistakes': [
+        "Menulis kondisi else if setelah else; else harus menjadi cabang terakhir.",
+        "Mengurutkan ambang nilai dari kecil ke besar sehingga cabang lebih tinggi tertutup.",
+        "Hanya menguji contoh yang berhasil, tanpa memeriksa nilai tepat di batas.",
+      ],
       'summary': [
         'Percabangan digunakan untuk pengambilan keputusan.',
         'Kondisi biasanya menghasilkan nilai true atau false.',
@@ -120,6 +196,25 @@ if (nilai >= 75) {
       'exercise': "Tampilkan bilangan genap dari 2 sampai 10.",
       'hint':
           "Mulai i dari 2, ulangi selama i <= 10, lalu tambah i sebanyak 2.",
+      'objectives': [
+        "Membaca bagian awal, syarat, dan perubahan pada for.",
+        "Memilih for atau while sesuai kebutuhan.",
+        "Membuat kondisi berhenti agar loop tidak berjalan selamanya.",
+      ],
+      'conceptGuide': "Pada for, bagian awal dijalankan sekali, kondisi diperiksa sebelum tiap putaran, dan perubahan nilai terjadi setelah isi loop. for cocok untuk jumlah putaran yang terukur; while cocok ketika pengulangan bergantung pada kondisi. Pastikan perubahan variabel akhirnya membuat kondisi berhenti.",
+      'examples': [
+        {
+          'title': "Menjumlahkan angka dengan perulangan",
+          'explanation': "Variabel total dimulai dari 0. Setiap putaran menambahkan nilai i, yaitu 1, 2, 3, lalu 4.",
+          'code': "int total = 0;\n\nfor (int i = 1; i <= 4; i++) {\n  total += i;\n}\n\nprint(total);",
+          'output': "10",
+        },
+      ],
+      'commonMistakes': [
+        "Lupa menaikkan atau mengubah variabel pengendali pada while.",
+        "Memakai i < 5 saat nilai 5 juga seharusnya ikut diproses.",
+        "Mengubah i di dua tempat sehingga ada angka yang terlewat.",
+      ],
       'summary': [
         'Perulangan membuat kode lebih ringkas.',
         'Pastikan kondisi berhenti tercapai agar tidak terjadi perulangan tanpa akhir.',
@@ -146,6 +241,25 @@ print(buah.length); // 4''',
       'output': "Apel\n4",
       'exercise': "Tambahkan buah Nanas ke dalam List, lalu tampilkan elemen terakhirnya.",
       'hint': "Panggil add, lalu akses elemen terakhir menggunakan indeks length - 1.",
+      'objectives': [
+        "Membuat List dengan tipe elemen yang sesuai.",
+        "Mengakses, mengubah, menambah, dan menghitung elemen.",
+        "Menelusuri List dengan perulangan.",
+      ],
+      'conceptGuide': "List<T> membatasi isi agar bertipe T, misalnya List<int> untuk angka. Indeks dimulai dari 0, sehingga elemen terakhir ada pada index length - 1. List biasa dapat ditambah dengan add; sebelum membaca indeks, pastikan List tidak kosong dan indeksnya masih dalam rentang.",
+      'examples': [
+        {
+          'title': "Menghitung rata-rata nilai",
+          'explanation': "for-in mengambil setiap angka dari List dan menambahkannya ke total. Setelah itu, total dibagi jumlah elemen untuk memperoleh rata-rata.",
+          'code': "List<int> nilai = [80, 75, 90];\nint total = 0;\n\nfor (final angka in nilai) {\n  total += angka;\n}\n\ndouble rataRata = total / nilai.length;\nprint(rataRata.toStringAsFixed(1));",
+          'output': "81.7",
+        },
+      ],
+      'commonMistakes': [
+        "Mengakses buah[3] padahal indeks yang tersedia hanya 0 sampai 2.",
+        "Membagi dengan length ketika List kosong sehingga terjadi pembagian dengan nol.",
+        "Mencampur tipe data yang berbeda dalam List bertipe tertentu.",
+      ],
       'summary': [
         'Gunakan List untuk mengelola banyak data sejenis.',
         'Pastikan indeks yang digunakan tersedia.',
@@ -170,6 +284,25 @@ void main() {
       'exercise': "Buat function kali yang menerima dua angka dan mengembalikan hasil perkaliannya.",
       'hint':
           "Gunakan tipe kembalian int, dua parameter int, lalu return a * b.",
+      'objectives': [
+        "Mendefinisikan function dengan nama dan tipe yang jelas.",
+        "Mengirim nilai melalui parameter dan argumen.",
+        "Memilih nilai balik atau void sesuai tugas function.",
+      ],
+      'conceptGuide': "Parameter ditulis pada definisi function; argumen adalah nilai yang diberikan saat function dipanggil. Function bertipe selain void perlu mengembalikan nilai yang sesuai dengan tipe tersebut melalui return. Pisahkan tugas berulang menjadi function kecil agar lebih mudah diuji dan digunakan kembali.",
+      'examples': [
+        {
+          'title': "Membuat function sapaan",
+          'explanation': "nama adalah parameter bertipe String. Saat dipanggil dengan argumen Alya, function mengembalikan sapaan yang kemudian ditampilkan.",
+          'code': "String sapa(String nama) {\n  return 'Halo, ' + nama + '!';\n}\n\nprint(sapa('Alya'));",
+          'output': "Halo, Alya!",
+        },
+      ],
+      'commonMistakes': [
+        "Lupa menulis return pada function yang harus menghasilkan nilai.",
+        "Mengembalikan tipe yang berbeda dari tipe hasil function.",
+        "Mencampur nama parameter dengan nilai argumen saat memanggil function.",
+      ],
       'summary': [
         'Pisahkan tugas program ke dalam fungsi yang sesuai.',
         'Gunakan parameter untuk menerima masukan.',
@@ -192,6 +325,25 @@ print(nama.length);''',
       'output': "Zahra\n  ZAHRA  \n9",
       'exercise': "Ubah nama menjadi huruf kecil dan tampilkan jumlah karakternya setelah trim.",
       'hint': "Gabungkan trim, toLowerCase, dan length pada teks.",
+      'objectives': [
+        "Menggabungkan teks dengan operator + atau interpolasi.",
+        "Memakai metode trim, contains, dan perubahan huruf.",
+        "Memahami bahwa metode String menghasilkan nilai baru.",
+      ],
+      'conceptGuide': "String tidak diubah di tempat; metode seperti trim dan toUpperCase mengembalikan String baru. Simpan hasilnya jika ingin memakai bentuk yang sudah diolah. Interpolasi dapat menyisipkan nilai variabel atau hasil ekspresi ke dalam teks.",
+      'examples': [
+        {
+          'title': "Menggabungkan nama",
+          'explanation': "Dua teks digabung dengan spasi di tengah. contains memeriksa apakah nama lengkap memuat kata Putri dan mengembalikan bool.",
+          'code': "String namaDepan = 'Alya';\nString namaBelakang = 'Putri';\nString namaLengkap =\n    (namaDepan + ' ' + namaBelakang).trim();\n\nprint(namaLengkap);\nprint(namaLengkap.contains('Putri'));",
+          'output': "Alya Putri\ntrue",
+        },
+      ],
+      'commonMistakes': [
+        "Memanggil trim tanpa menyimpan hasilnya, lalu berharap variabel asal berubah.",
+        "Mengira length setelah trim sama dengan panjang teks sebelum spasinya dihapus.",
+        "Menyambung angka dan teks tanpa mengubah angka menjadi String.",
+      ],
       'summary': [
         'String digunakan untuk mengolah data berbentuk teks.',
         'Pilih metode manipulasi sesuai kebutuhan.',
@@ -216,6 +368,25 @@ void main() {
       'output': "Masukkan nama: Zahra\nHalo, Zahra!",
       'exercise': "Minta nama pengguna lalu tampilkan pesan Selamat belajar, diikuti nama tersebut.",
       'hint': "Simpan readLineSync ke variabel nama, kemudian sisipkan nama itu pada String output.",
+      'objectives': [
+        "Menampilkan informasi dengan print dan stdout.write.",
+        "Membaca masukan teks dari terminal.",
+        "Mengubah masukan angka dengan int.tryParse secara aman.",
+      ],
+      'conceptGuide': "stdin.readLineSync mengembalikan String? karena masukan bisa tidak tersedia. Gunakan ?? untuk nilai pengganti dan int.tryParse untuk konversi angka yang mungkin gagal. stdout.write menulis prompt tanpa pindah baris, sedangkan print menambahkan baris baru.",
+      'examples': [
+        {
+          'title': "Membaca dan memeriksa masukan umur",
+          'explanation': "Masukan dibaca sebagai teks. int.tryParse mencoba mengubahnya menjadi angka; jika gagal, nilai 0 dipakai agar program tetap memiliki nilai yang bisa diproses.",
+          'code': "import 'dart:io';\n\nstdout.write('Masukkan umur: ');\nString input = stdin.readLineSync() ?? '';\nint umur = int.tryParse(input) ?? 0;\n\nprint('Tahun depan: ' + (umur + 1).toString());",
+          'output': "Masukkan umur: 17\nTahun depan: 18",
+        },
+      ],
+      'commonMistakes': [
+        "Menganggap hasil readLineSync selalu berisi teks dan bukan null.",
+        "Memakai int.parse pada masukan yang belum dipastikan berupa angka.",
+        "Lupa bahwa masukan terminal berbentuk String sebelum dikonversi.",
+      ],
       'summary': [
         'Input menyediakan data untuk diproses.',
         'Output menyampaikan hasil pemrosesan.',
@@ -240,6 +411,25 @@ print(hasilBenar); // 13''',
       'output': "13",
       'exercise': "Program ingin menghitung total harga 12 ditambah biaya kirim 3, tetapi memakai operator yang salah. Perbaiki hasilnya.",
       'hint': "Periksa operator aritmatika pada ekspresi dan pilih operator penjumlahan.",
+      'objectives': [
+        "Membedakan syntax error, runtime error, dan logic error.",
+        "Memeriksa nilai antara untuk menemukan sumber hasil yang salah.",
+        "Menguji ulang program setelah perbaikan.",
+      ],
+      'conceptGuide': "Mulailah dengan membaca pesan error dan baris yang ditunjuk. Jika program tetap berjalan tetapi hasilnya keliru, lacak nilai variabel dari input sampai output dan periksa rumusnya. Ubah satu hal dalam satu waktu, lalu jalankan kembali contoh normal dan contoh batas.",
+      'examples': [
+        {
+          'title': "Menelusuri perhitungan rata-rata",
+          'explanation': "Menampilkan total dan rata-rata sebagai titik pemeriksaan membantu melihat tahap mana yang menghasilkan nilai tidak sesuai.",
+          'code': "List<int> nilai = [70, 80];\nint total = 0;\n\nfor (final angka in nilai) {\n  total += angka;\n}\n\ndouble rataRata = total / nilai.length;\nprint('Total: ' + total.toString());\nprint('Rata-rata: ' + rataRata.toStringAsFixed(1));",
+          'output': "Total: 150\nRata-rata: 75.0",
+        },
+      ],
+      'commonMistakes': [
+        "Mengubah banyak bagian sekaligus sehingga sumber bug makin sulit dilacak.",
+        "Mengabaikan pesan error atau tidak memeriksa baris yang ditunjuk.",
+        "Menganggap program bebas bug hanya karena satu contoh berhasil.",
+      ],
       'summary': [
         'Baca pesan error dan periksa baris yang bermasalah.',
         'Uji kembali program setelah melakukan perbaikan.',
@@ -271,6 +461,25 @@ void main() {
       'output': "Nama saya Alya",
       'exercise': "Buat class Buku dengan property judul dan method untuk menampilkan judul buku.",
       'hint': "Tulis constructor untuk mengisi judul, lalu buat method yang memanggil print.",
+      'objectives': [
+        "Membuat class sebagai rancangan objek.",
+        "Menyimpan data objek pada property.",
+        "Membuat constructor dan memanggil method.",
+      ],
+      'conceptGuide': "Class menyatukan data dan perilaku yang berkaitan. Constructor dijalankan ketika object dibuat dan dapat mengisi property; method adalah function yang dimiliki class. Setiap object memiliki nilai property sendiri, tetapi menggunakan rancangan class yang sama.",
+      'examples': [
+        {
+          'title': "Membuat object Produk",
+          'explanation': "Produk mendefinisikan property nama dan harga. Constructor mengisi keduanya saat object buku dibuat, lalu method tampilkan memakai data object tersebut.",
+          'code': "class Produk {\n  final String nama;\n  final int harga;\n\n  Produk(this.nama, this.harga);\n\n  void tampilkan() {\n    print(nama + ': Rp' + harga.toString());\n  }\n}\n\nvoid main() {\n  final buku = Produk('Buku', 15000);\n  buku.tampilkan();\n}",
+          'output': "Buku: Rp15000",
+        },
+      ],
+      'commonMistakes': [
+        "Mencoba memanggil method instance langsung dari class tanpa membuat object.",
+        "Lupa mengisi property yang wajib saat membuat object.",
+        "Membuat class hanya berisi data tanpa memahami perilaku yang perlu dimiliki object.",
+      ],
       'summary': [
         'Class menggabungkan data dan perilaku.',
         'Object dibuat berdasarkan class.',
@@ -298,6 +507,25 @@ print(status);''',
       'output': "Lulus",
       'exercise': "Ubah kasus ini agar memeriksa nilai 2 mata pelajaran dan menampilkan Lulus jika rata-ratanya minimal 75.",
       'hint': "Jumlahkan kedua nilai, bagi dua, lalu bandingkan rata-ratanya dengan 75.",
+      'objectives': [
+        "Mengidentifikasi kebutuhan dan membentuk input, proses, serta output.",
+        "Menggabungkan List, perulangan, variabel, dan percabangan.",
+        "Menguji kasus normal, batas, dan data yang belum tersedia.",
+      ],
+      'conceptGuide': "Selesaikan masalah secara bertahap: tulis kebutuhan, tentukan data masukan, rancang proses, lalu tentukan hasil yang diharapkan. Pecah pekerjaan menjadi langkah kecil dan gunakan konsep yang sudah dipelajari. Uji beberapa data, termasuk nilai tepat di ambang dan jumlah data kosong atau minimum.",
+      'examples': [
+        {
+          'title': "Rekap nilai beberapa mata pelajaran",
+          'explanation': "List menyimpan nilai, loop menghitung jumlah, lalu program menghitung rata-rata dan memilih status berdasarkan ambang 75.",
+          'code': "List<int> nilai = [80, 65, 90];\nint total = 0;\n\nfor (final angka in nilai) {\n  total += angka;\n}\n\ndouble rataRata = total / nilai.length;\nString status;\nif (rataRata >= 75) {\n  status = 'Lulus';\n} else {\n  status = 'Belajar lagi';\n}\n\nprint('Rata-rata: ' + rataRata.toStringAsFixed(1));\nprint('Status: ' + status);",
+          'output': "Rata-rata: 78.3\nStatus: Lulus",
+        },
+      ],
+      'commonMistakes': [
+        "Mulai menulis kode sebelum jelas apa input dan output yang diinginkan.",
+        "Tidak menguji nilai tepat pada ambang kelulusan.",
+        "Menghitung rata-rata dengan pembagi yang tidak sama dengan jumlah nilai.",
+      ],
       'summary': [
         'Pahami masalah sebelum membuat program.',
         'Gabungkan variabel, operator, dan percabangan sesuai kebutuhan.',
@@ -418,6 +646,8 @@ print(status);''',
                 height: 1.7,
               ),
             ),
+            const SizedBox(height: 20),
+            _buildLearningObjectives(content['objectives'] as List<String>),
             const SizedBox(height: 24),
             _sectionTitle('Konsep Penting'),
             const SizedBox(height: 12),
@@ -498,9 +728,29 @@ print(status);''',
               ),
             ),
             const SizedBox(height: 20),
+            _sectionTitle('Pendalaman Materi'),
+            const SizedBox(height: 8),
+            _buildConceptGuideCard(
+              content['conceptGuide'] as String,
+              accent: accent,
+            ),
+            const SizedBox(height: 20),
             _sectionTitle('Hasil Contoh'),
             const SizedBox(height: 10),
             _buildOutputCard(content['output'] as String),
+            const SizedBox(height: 20),
+            _sectionTitle('Contoh Tambahan'),
+            const SizedBox(height: 10),
+            ...(content['examples'] as List).map(
+              (example) => _buildExtraExampleCard(
+                Map<String, dynamic>.from(example as Map),
+                accent: accent,
+              ),
+            ),
+            const SizedBox(height: 20),
+            _sectionTitle('Kesalahan Umum'),
+            const SizedBox(height: 10),
+            _buildCommonMistakes(content['commonMistakes'] as List<String>),
             const SizedBox(height: 20),
             _buildChallengeCard(
               context,
@@ -554,6 +804,241 @@ print(status);''',
             MaterialLearningActions(material: material),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildLearningObjectives(List<String> objectives) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.primary, AppColors.deepBlue],
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(14),
+          bottomLeft: Radius.circular(14),
+          bottomRight: Radius.circular(24),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.flag_rounded, color: AppColors.butterYellow),
+              SizedBox(width: 8),
+              Text(
+                'TARGET BELAJAR',
+                style: TextStyle(
+                  color: AppColors.butterYellow,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...objectives.map(
+            (objective) => Padding(
+              padding: const EdgeInsets.only(bottom: 9),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    size: 18,
+                    color: AppColors.softWhite,
+                  ),
+                  const SizedBox(width: 9),
+                  Expanded(
+                    child: Text(
+                      objective,
+                      style: TextStyle(
+                        color: AppColors.softWhite,
+                        fontSize: 13,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildConceptGuideCard(String guide, {required Color accent}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.softTint(AppColors.softLilac, opacity: 0.2),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: accent.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.auto_awesome_rounded, color: AppColors.softLilac),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              guide,
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 13,
+                height: 1.55,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExtraExampleCard(
+    Map<String, dynamic> example, {
+    required Color accent,
+  }) {
+    final accentForeground = accent.computeLuminance() > 0.32
+        ? AppColors.darkText
+        : AppColors.softWhite;
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(22),
+          topRight: Radius.circular(14),
+          bottomLeft: Radius.circular(14),
+          bottomRight: Radius.circular(22),
+        ),
+        border: Border.all(color: accent.withValues(alpha: 0.7), width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: accent.withValues(alpha: 0.1),
+            blurRadius: 14,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: accent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.code_rounded,
+                  color: accentForeground,
+                  size: 21,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  example['title'] as String,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            example['explanation'] as String,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 13,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.primaryDark,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SelectableText(
+                example['code'] as String,
+                style: const TextStyle(
+                  color: AppColors.softWhite,
+                  fontFamily: 'monospace',
+                  fontSize: 12,
+                  height: 1.55,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          _buildOutputCard(example['output'] as String),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCommonMistakes(List<String> mistakes) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.softTint(AppColors.dustyRose, opacity: 0.16),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.dustyRose.withValues(alpha: 0.42)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: mistakes
+            .map(
+              (mistake) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.error_outline_rounded,
+                      color: AppColors.dustyRose,
+                      size: 19,
+                    ),
+                    const SizedBox(width: 9),
+                    Expanded(
+                      child: Text(
+                        mistake,
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 13,
+                          height: 1.45,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }

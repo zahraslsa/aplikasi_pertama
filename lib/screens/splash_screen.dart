@@ -146,6 +146,22 @@ class _CodifySplashScreenState extends State<CodifySplashScreen>
                                   ),
                                 ),
                                 const Positioned(
+                                  left: -20,
+                                  bottom: 14,
+                                  child: CodifyMascot(
+                                    size: 54,
+                                    character: CodifyCharacter.zippy,
+                                  ),
+                                ),
+                                const Positioned(
+                                  right: -20,
+                                  bottom: 44,
+                                  child: CodifyMascot(
+                                    size: 54,
+                                    character: CodifyCharacter.byte,
+                                  ),
+                                ),
+                                const Positioned(
                                   right: -12,
                                   top: 18,
                                   child: Icon(

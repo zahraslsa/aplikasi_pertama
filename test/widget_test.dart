@@ -29,7 +29,7 @@ void main() {
 
     expect(find.text('CODIFY'), findsOneWidget);
     expect(find.text('Mulai Tes'), findsOneWidget);
-    expect(find.byType(CodifyMascot), findsOneWidget);
+    expect(find.byType(CodifyMascot), findsWidgets);
     expect(find.text('Hai, Sobat CODIFY!'), findsOneWidget);
     expect(find.text('Siap belajar coding hari ini?'), findsOneWidget);
 

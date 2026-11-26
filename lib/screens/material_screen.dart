@@ -275,14 +275,60 @@ class _MaterialScreenState extends State<MaterialScreen> {
             ),
           ),
           const SizedBox(width: 8),
-          Container(
-            width: 82,
-            height: 82,
-            decoration: BoxDecoration(
-              color: AppColors.softWhite.withValues(alpha: 0.96),
-              shape: BoxShape.circle,
+          SizedBox(
+            width: 108,
+            height: 96,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  left: 0,
+                  bottom: 2,
+                  child: Container(
+                    width: 76,
+                    height: 76,
+                    decoration: const BoxDecoration(
+                      color: AppColors.softWhite,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(child: CodifyMascot(size: 70)),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      color: AppColors.butterYellow,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const CodifyMascot(
+                      size: 44,
+                      character: CodifyCharacter.zippy,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: AppColors.skyBlue,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.softWhite, width: 2),
+                    ),
+                    child: const CodifyMascot(
+                      size: 44,
+                      character: CodifyCharacter.byte,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            child: const Center(child: CodifyMascot(size: 74)),
           ),
         ],
       ),
@@ -299,19 +345,22 @@ class _MaterialScreenState extends State<MaterialScreen> {
     final hasStarted = materialProgress.hasStarted(number);
     final progress = materialProgress.progressFor(number);
     final accent = AppColors.learningAccentFor(number);
-    final cardRadius = (int.tryParse(number) ?? 0).isEven
-        ? const BorderRadius.only(
-            topLeft: Radius.circular(14),
-            topRight: Radius.circular(24),
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(14),
-          )
-        : const BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(14),
-            bottomLeft: Radius.circular(14),
-            bottomRight: Radius.circular(24),
-          );
+    final materialIndex = int.tryParse(number) ?? 1;
+    final cardRadius = switch (materialIndex % 3) {
+      0 => BorderRadius.circular(30),
+      1 => const BorderRadius.only(
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(14),
+        bottomLeft: Radius.circular(14),
+        bottomRight: Radius.circular(30),
+      ),
+      _ => const BorderRadius.only(
+        topLeft: Radius.circular(14),
+        topRight: Radius.circular(30),
+        bottomLeft: Radius.circular(30),
+        bottomRight: Radius.circular(14),
+      ),
+    };
     final accentForeground = accent.computeLuminance() > 0.32
         ? AppColors.darkText
         : AppColors.softWhite;
@@ -351,7 +400,10 @@ class _MaterialScreenState extends State<MaterialScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.softTint(
+            accent,
+            opacity: materialIndex.isEven ? 0.24 : 0.16,
+          ),
           borderRadius: cardRadius,
           border: Border.all(color: accent.withValues(alpha: 0.78), width: 1.3),
           boxShadow: [
@@ -367,17 +419,39 @@ class _MaterialScreenState extends State<MaterialScreen> {
           children: [
             Row(
               children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: accent,
-                    borderRadius: BorderRadius.circular(17),
-                  ),
-                  child: Icon(
-                    material['icon'] as IconData,
-                    color: accentForeground,
-                    size: 26,
+                SizedBox(
+                  width: 60,
+                  height: 58,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.none,
+                    children: [
+                      CodifyMascot(
+                        size: 56,
+                        character: codifyCharacterFor(materialIndex),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: accent,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.softWhite,
+                              width: 2,
+                            ),
+                          ),
+                          child: Icon(
+                            material['icon'] as IconData,
+                            color: accentForeground,
+                            size: 13,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 14),

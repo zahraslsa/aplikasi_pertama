@@ -142,12 +142,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.psychology_alt_rounded,
-                  size: 34,
-                  color: AppColors.primary,
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.psychology_alt_rounded,
+                      size: 34,
+                      color: AppColors.primary,
+                    ),
+                    const Spacer(),
+                    const CodifyMascot(
+                      size: 58,
+                      character: CodifyCharacter.zippy,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 const Text(
                   'Tes Diagnostik',
                   style: TextStyle(
@@ -283,6 +292,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               size: 18,
             ),
           ),
+
           Row(
             children: [
               Expanded(
@@ -374,6 +384,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: const Center(child: CodifyMascot(size: 90)),
               ),
             ],
+          ),
+          Positioned(
+            right: 0,
+            bottom: -8,
+            child: Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: AppColors.butterYellow,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.softWhite, width: 3),
+              ),
+              child: const CodifyMascot(
+                size: 46,
+                character: CodifyCharacter.pip,
+              ),
+            ),
           ),
         ],
       ),
@@ -505,19 +532,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String number,
   }) {
     final accent = AppColors.learningAccentFor(number);
-    final cardRadius = (int.tryParse(number) ?? 0).isEven
-        ? const BorderRadius.only(
-            topLeft: Radius.circular(14),
-            topRight: Radius.circular(24),
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(14),
-          )
-        : const BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(14),
-            bottomLeft: Radius.circular(14),
-            bottomRight: Radius.circular(24),
-          );
+    final materialIndex = int.tryParse(number) ?? 1;
+    final cardRadius = switch (materialIndex % 3) {
+      0 => BorderRadius.circular(26),
+      1 => const BorderRadius.only(
+        topLeft: Radius.circular(28),
+        topRight: Radius.circular(12),
+        bottomLeft: Radius.circular(12),
+        bottomRight: Radius.circular(28),
+      ),
+      _ => const BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(28),
+        bottomLeft: Radius.circular(28),
+        bottomRight: Radius.circular(12),
+      ),
+    };
     return InkWell(
       borderRadius: cardRadius,
       onTap: () async {
@@ -537,7 +567,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.softTint(
+            accent,
+            opacity: materialIndex.isEven ? 0.24 : 0.16,
+          ),
           borderRadius: cardRadius,
           border: Border.all(color: accent.withValues(alpha: 0.72), width: 1.2),
           boxShadow: [
@@ -550,19 +583,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         child: Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: accent,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(
-                icon,
-                color: accent.computeLuminance() > 0.32
-                    ? AppColors.darkText
-                    : AppColors.softWhite,
-                size: 25,
+            SizedBox(
+              width: 56,
+              height: 56,
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  CodifyMascot(
+                    size: 52,
+                    character: codifyCharacterFor(materialIndex),
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 23,
+                      height: 23,
+                      decoration: BoxDecoration(
+                        color: accent,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.softWhite,
+                          width: 2,
+                        ),
+                      ),
+                      child: Icon(
+                        icon,
+                        color: accent.computeLuminance() > 0.32
+                            ? AppColors.darkText
+                            : AppColors.softWhite,
+                        size: 12,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(width: 14),

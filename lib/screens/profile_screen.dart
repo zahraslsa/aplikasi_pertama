@@ -300,7 +300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(width: 12),
                   Expanded(child: identityDetails),
                   const SizedBox(width: 4),
-                  const CodifyMascot(size: 48),
+                  const CodifyMascot(size: 58, character: CodifyCharacter.byte),
                 ],
               );
             },
