@@ -106,43 +106,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: FutureBuilder<Map<String, String>>(
-                  future: _profile,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text(
-                        'Profil gagal dimuat: ${snapshot.error}',
-                        style: const TextStyle(color: AppColors.error),
-                      );
-                    }
-                    return Text(
-                      'Hai, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              const CodifyMascot(size: 64),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Siap belajar coding hari ini?',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.textSecondary,
-              height: 1.5,
-            ),
-          ),
-
+          _buildWelcomeHero(),
           const SizedBox(height: 24),
 
           _buildProgressCard(context),
@@ -267,6 +231,133 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () => setState(() => _selectedIndex = 1),
             icon: const Icon(Icons.menu_book_rounded),
             label: const Text('Lihat Semua 12 Materi'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWelcomeHero() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.primary, AppColors.primaryDark],
+        ),
+        borderRadius: BorderRadius.circular(26),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.2),
+            blurRadius: 22,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 8,
+            right: 112,
+            child: Icon(
+              Icons.auto_awesome_rounded,
+              color: AppColors.softWhite.withValues(alpha: 0.55),
+              size: 18,
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: FutureBuilder<Map<String, String>>(
+                  future: _profile,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text(
+                        'Profil gagal dimuat: ${snapshot.error}',
+                        style: const TextStyle(color: AppColors.softWhite),
+                      );
+                    }
+                    final name = snapshot.data?['name'] ?? 'Sobat CODIFY';
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.softWhite.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.auto_awesome_rounded,
+                                size: 14,
+                                color: AppColors.softWhite,
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                'TEMAN BELAJAR CODING',
+                                style: TextStyle(
+                                  color: AppColors.softWhite,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.7,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Hai, $name!',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.softWhite,
+                            fontSize: 22,
+                            height: 1.15,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 7),
+                        Text(
+                          'Siap belajar coding hari ini?',
+                          style: TextStyle(
+                            color: AppColors.softWhite.withValues(alpha: 0.9),
+                            fontSize: 13,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: AppColors.softWhite.withValues(alpha: 0.96),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryDark.withValues(alpha: 0.18),
+                      blurRadius: 12,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: const Center(child: CodifyMascot(size: 90)),
+              ),
+            ],
           ),
         ],
       ),

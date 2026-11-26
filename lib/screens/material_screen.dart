@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/learning_store.dart';
 import 'material_detail_screen.dart';
 import '../theme/app_colors.dart';
+import '../widgets/codify_mascot.dart';
 
 class _MaterialScreenState extends State<MaterialScreen> {
   final TextEditingController _searchController = TextEditingController();
@@ -210,34 +211,78 @@ class _MaterialScreenState extends State<MaterialScreen> {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.sageGreen,
-        borderRadius: BorderRadius.circular(22),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.primary, AppColors.primaryDark],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.16),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Icon(Icons.menu_book_rounded, color: AppColors.forestGreen, size: 38),
-          SizedBox(height: 16),
-          Text(
-            'Belajar Pemrograman',
-            style: TextStyle(
-              color: AppColors.darkText,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.softWhite.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: const Text(
+                    'RUANG BELAJAR CODIFY',
+                    style: TextStyle(
+                      color: AppColors.softWhite,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.65,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Belajar Pemrograman',
+                  style: TextStyle(
+                    color: AppColors.softWhite,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 7),
+                Text(
+                  'Pelajari konsep dari dasar hingga penerapannya.',
+                  style: TextStyle(
+                    color: AppColors.softWhite.withValues(alpha: 0.9),
+                    fontSize: 12,
+                    height: 1.45,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 8),
-          Text(
-            'Pelajari konsep pemrograman dari dasar '
-            'hingga penerapannya melalui materi yang '
-            'disusun secara bertahap.',
-            style: TextStyle(
-              color: AppColors.darkText,
-              fontSize: 13,
-              height: 1.5,
+          const SizedBox(width: 8),
+          Container(
+            width: 82,
+            height: 82,
+            decoration: BoxDecoration(
+              color: AppColors.softWhite.withValues(alpha: 0.96),
+              shape: BoxShape.circle,
             ),
+            child: const Center(child: CodifyMascot(size: 74)),
           ),
         ],
       ),

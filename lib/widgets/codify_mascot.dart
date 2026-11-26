@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+
 class CodifyMascot extends StatelessWidget {
   final double size;
 
@@ -19,12 +21,12 @@ class CodifyMascot extends StatelessWidget {
 }
 
 class _CodifyMascotPainter extends CustomPainter {
-  static const _forest = Color(0xFF294D3B);
-  static const _sage = Color(0xFF91B79A);
-  static const _sageLight = Color(0xFFB7CFB1);
-  static const _sageDark = Color(0xFF73987F);
-  static const _cream = Color(0xFFFFF2D8);
-  static const _orange = Color(0xFFE89A65);
+  static const _forest = AppColors.primaryDark;
+  static const _sage = AppColors.primary;
+  static const _sageLight = AppColors.skyBlue;
+  static const _sageDark = AppColors.deepBlue;
+  static const _cream = AppColors.softWhite;
+  static const _orange = AppColors.skyBlue;
 
   final Paint _fill = Paint()..style = PaintingStyle.fill;
   final Paint _detailStroke = Paint()

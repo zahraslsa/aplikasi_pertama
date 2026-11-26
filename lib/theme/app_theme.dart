@@ -25,25 +25,25 @@ class AppTheme {
 
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.softWhite,
-        indicatorColor: AppColors.sageGreen,
+        indicatorColor: AppColors.primaryLight,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: selected ? AppColors.darkText : AppColors.textSecondary,
+            color: selected ? AppColors.primary : AppColors.textSecondary,
             fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: selected ? AppColors.darkText : AppColors.textSecondary,
+            color: selected ? AppColors.primary : AppColors.textSecondary,
           );
         }),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.primaryDark,
           foregroundColor: AppColors.softWhite,
           minimumSize: const Size(double.infinity, 52),
           shape: RoundedRectangleBorder(
