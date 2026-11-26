@@ -164,7 +164,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: AppColors.softTint(AppColors.peach, opacity: 0.24),
+              color: AppColors.softTint(AppColors.butterYellow, opacity: 0.3),
               borderRadius: BorderRadius.circular(18),
             ),
             child: Column(
@@ -302,11 +302,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppColors.sageForest, AppColors.forestGreen],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.32),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
@@ -316,14 +312,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     Icon(
                       Icons.auto_graph_rounded,
-                      color: AppColors.softWhite,
+                      color: AppColors.forestGreen,
                       size: 26,
                     ),
                     SizedBox(width: 10),
                     Text(
                       'Progres Belajarmu',
                       style: TextStyle(
-                        color: AppColors.softWhite,
+                        color: AppColors.darkText,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -334,7 +330,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Text(
                   '${(progress * 100).round()}%',
                   style: const TextStyle(
-                    color: AppColors.softWhite,
+                    color: AppColors.darkText,
                     fontSize: 34,
                     fontWeight: FontWeight.bold,
                   ),
@@ -345,9 +341,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 8,
-                    backgroundColor: const Color(0x66FFFDF7),
+                    backgroundColor: AppColors.dustyBlue.withValues(
+                      alpha: 0.36,
+                    ),
                     valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.softWhite,
+                      AppColors.forestGreen,
                     ),
                   ),
                 ),
@@ -357,7 +355,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ? '0 dari $total materi selesai. Mulai belajar untuk melihat perkembanganmu.'
                       : '$count dari $total materi selesai. Ketuk untuk melihat progres.',
                   style: const TextStyle(
-                    color: AppColors.softWhite,
+                    color: AppColors.textSecondary,
                     fontSize: 12,
                   ),
                 ),
@@ -395,9 +393,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.softTint(accent, opacity: 0.1),
+          color: AppColors.softTint(accent, opacity: 0.16),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: accent.withValues(alpha: 0.36)),
+          border: Border.all(color: accent.withValues(alpha: 0.42)),
         ),
         child: Row(
           children: [
@@ -405,7 +403,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.softTint(accent, opacity: 0.38),
+                color: AppColors.softTint(accent, opacity: 0.42),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(icon, color: AppColors.darkText, size: 25),
