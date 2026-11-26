@@ -4,6 +4,7 @@ import '../data/learning_store.dart';
 import 'material_detail_screen.dart';
 import '../theme/app_colors.dart';
 import '../widgets/codify_mascot.dart';
+import '../widgets/codify_card_surface.dart';
 
 class _MaterialScreenState extends State<MaterialScreen> {
   final TextEditingController _searchController = TextEditingController();
@@ -346,20 +347,10 @@ class _MaterialScreenState extends State<MaterialScreen> {
     final progress = materialProgress.progressFor(number);
     final accent = AppColors.learningAccentFor(number);
     final materialIndex = int.tryParse(number) ?? 1;
-    final cardRadius = switch (materialIndex % 3) {
-      0 => BorderRadius.circular(30),
-      1 => const BorderRadius.only(
-        topLeft: Radius.circular(30),
-        topRight: Radius.circular(14),
-        bottomLeft: Radius.circular(14),
-        bottomRight: Radius.circular(30),
-      ),
-      _ => const BorderRadius.only(
-        topLeft: Radius.circular(14),
-        topRight: Radius.circular(30),
-        bottomLeft: Radius.circular(30),
-        bottomRight: Radius.circular(14),
-      ),
+    final cardSilhouette = switch (materialIndex % 3) {
+      0 => CodifyCardSilhouette.foldedNote,
+      1 => CodifyCardSilhouette.ticket,
+      _ => CodifyCardSilhouette.sticker,
     };
     final accentForeground = accent.computeLuminance() > 0.32
         ? AppColors.darkText
@@ -381,8 +372,17 @@ class _MaterialScreenState extends State<MaterialScreen> {
         ? 'Sedang dipelajari'
         : 'Belum dimulai';
 
-    return InkWell(
-      borderRadius: cardRadius,
+    return CodifyCardSurface(
+      silhouette: cardSilhouette,
+      color: AppColors.softTint(
+        accent,
+        opacity: materialIndex.isEven ? 0.24 : 0.16,
+      ),
+      borderColor: accent,
+      borderWidth: 1.3,
+      elevation: 3,
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       onTap: () async {
         await Navigator.push<void>(
           context,
@@ -396,167 +396,145 @@ class _MaterialScreenState extends State<MaterialScreen> {
           });
         }
       },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.softTint(
-            accent,
-            opacity: materialIndex.isEven ? 0.24 : 0.16,
-          ),
-          borderRadius: cardRadius,
-          border: Border.all(color: accent.withValues(alpha: 0.78), width: 1.3),
-          boxShadow: [
-            BoxShadow(
-              color: accent.withValues(alpha: 0.1),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: 60,
-                  height: 58,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    clipBehavior: Clip.none,
-                    children: [
-                      CodifyMascot(
-                        size: 56,
-                        character: codifyCharacterFor(materialIndex),
-                      ),
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: accent,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.softWhite,
-                              width: 2,
-                            ),
-                          ),
-                          child: Icon(
-                            material['icon'] as IconData,
-                            color: accentForeground,
-                            size: 13,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: 60,
+                height: 58,
+                child: Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    CodifyMascot(
+                      size: 56,
+                      character: codifyCharacterFor(materialIndex),
+                    ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: 24,
+                        height: 24,
                         decoration: BoxDecoration(
                           color: accent,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          'MATERI $number',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.3,
-                            color: accentForeground,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.softWhite,
+                            width: 2,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        material['title'] as String,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                        child: Icon(
+                          material['icon'] as IconData,
+                          color: accentForeground,
+                          size: 13,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 6),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppColors.textSecondary,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: accent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'MATERI $number',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.3,
+                          color: accentForeground,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      material['title'] as String,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              material['subtitle'] as String,
-              style: const TextStyle(
-                fontSize: 12,
-                height: 1.4,
+              ),
+              const SizedBox(width: 6),
+              const Icon(
+                Icons.chevron_right_rounded,
                 color: AppColors.textSecondary,
               ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            material['subtitle'] as String,
+            style: const TextStyle(
+              fontSize: 12,
+              height: 1.4,
+              color: AppColors.textSecondary,
             ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 9,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: statusBackground,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(statusIcon, size: 14, color: statusColor),
-                      const SizedBox(width: 5),
-                      Text(
-                        statusLabel,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: statusColor,
-                        ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                decoration: BoxDecoration(
+                  color: statusBackground,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(statusIcon, size: 14, color: statusColor),
+                    const SizedBox(width: 5),
+                    Text(
+                      statusLabel,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: statusColor,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                Text(
-                  '${(progress * 100).round()}%',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 5,
-                backgroundColor: accent.withValues(alpha: 0.24),
-                valueColor: const AlwaysStoppedAnimation(AppColors.forestGreen),
               ),
+              const Spacer(),
+              Text(
+                '${(progress * 100).round()}%',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 5,
+              backgroundColor: accent.withValues(alpha: 0.24),
+              valueColor: const AlwaysStoppedAnimation(AppColors.forestGreen),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

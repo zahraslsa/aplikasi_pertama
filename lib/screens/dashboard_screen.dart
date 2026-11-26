@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
 import '../widgets/codify_mascot.dart';
+import '../widgets/codify_card_surface.dart';
 import 'material_detail_screen.dart';
 import 'diagnostic_screen.dart';
 import 'material_screen.dart';
@@ -108,21 +109,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 14),
 
-          Container(
-            width: double.infinity,
+          CodifyCardSurface(
+            silhouette: CodifyCardSilhouette.speechBubble,
+            color: AppColors.softTint(AppColors.butterYellow, opacity: 0.34),
+            borderColor: AppColors.peach.withValues(alpha: 0.58),
+            elevation: 2,
             padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: AppColors.softTint(AppColors.butterYellow, opacity: 0.34),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(28),
-                topRight: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(28),
-              ),
-              border: Border.all(
-                color: AppColors.peach.withValues(alpha: 0.36),
-              ),
-            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -401,96 +393,75 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )
             .length;
         final progress = total == 0 ? 0.0 : count / total;
-        return InkWell(
-          borderRadius: BorderRadius.circular(20),
+        return CodifyCardSurface(
+          silhouette: CodifyCardSilhouette.sticker,
+          color: AppColors.surface,
+          borderColor: AppColors.dustyBlue.withValues(alpha: 0.72),
+          borderWidth: 1.4,
+          elevation: 5,
+          padding: const EdgeInsets.all(20),
           onTap: () => setState(() => _selectedIndex = 2),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(26),
-                topRight: Radius.circular(18),
-                bottomLeft: Radius.circular(18),
-                bottomRight: Radius.circular(26),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(
+                      Icons.auto_graph_rounded,
+                      color: AppColors.softWhite,
+                      size: 23,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Progres Belajarmu',
+                    style: TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
-              border: Border.all(
-                color: AppColors.dustyBlue.withValues(alpha: 0.7),
-                width: 1.2,
+              const SizedBox(height: 20),
+              Text(
+                '${(progress * 100).round()}%',
+                style: const TextStyle(
+                  color: AppColors.darkText,
+                  fontSize: 34,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.dustyBlue.withValues(alpha: 0.14),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 42,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: const Icon(
-                        Icons.auto_graph_rounded,
-                        color: AppColors.softWhite,
-                        size: 23,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      'Progres Belajarmu',
-                      style: TextStyle(
-                        color: AppColors.darkText,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  '${(progress * 100).round()}%',
-                  style: const TextStyle(
-                    color: AppColors.darkText,
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
+              const SizedBox(height: 10),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 8,
+                  backgroundColor: AppColors.dustyBlue.withValues(alpha: 0.36),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    AppColors.forestGreen,
                   ),
                 ),
-                const SizedBox(height: 10),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: LinearProgressIndicator(
-                    value: progress,
-                    minHeight: 8,
-                    backgroundColor: AppColors.dustyBlue.withValues(
-                      alpha: 0.36,
-                    ),
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.forestGreen,
-                    ),
-                  ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                count == 0
+                    ? '0 dari $total materi selesai. Mulai belajar untuk melihat perkembanganmu.'
+                    : '$count dari $total materi selesai. Ketuk untuk melihat progres.',
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  count == 0
-                      ? '0 dari $total materi selesai. Mulai belajar untuk melihat perkembanganmu.'
-                      : '$count dari $total materi selesai. Ketuk untuk melihat progres.',
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
@@ -505,23 +476,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     final accent = AppColors.learningAccentFor(number);
     final materialIndex = int.tryParse(number) ?? 1;
-    final cardRadius = switch (materialIndex % 3) {
-      0 => BorderRadius.circular(26),
-      1 => const BorderRadius.only(
-        topLeft: Radius.circular(28),
-        topRight: Radius.circular(12),
-        bottomLeft: Radius.circular(12),
-        bottomRight: Radius.circular(28),
-      ),
-      _ => const BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(28),
-        bottomLeft: Radius.circular(28),
-        bottomRight: Radius.circular(12),
-      ),
+    final cardSilhouette = switch (materialIndex % 3) {
+      0 => CodifyCardSilhouette.foldedNote,
+      1 => CodifyCardSilhouette.ticket,
+      _ => CodifyCardSilhouette.sticker,
     };
-    return InkWell(
-      borderRadius: cardRadius,
+    return CodifyCardSurface(
+      silhouette: cardSilhouette,
+      color: AppColors.softTint(
+        accent,
+        opacity: materialIndex.isEven ? 0.24 : 0.16,
+      ),
+      borderColor: accent.withValues(alpha: 0.82),
+      borderWidth: 1.3,
+      elevation: 3,
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       onTap: () async {
         await Navigator.push<void>(
           context,
@@ -535,104 +505,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
           setState(_reloadHomeData);
         }
       },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.softTint(
-            accent,
-            opacity: materialIndex.isEven ? 0.24 : 0.16,
-          ),
-          borderRadius: cardRadius,
-          border: Border.all(color: accent.withValues(alpha: 0.72), width: 1.2),
-          boxShadow: [
-            BoxShadow(
-              color: accent.withValues(alpha: 0.12),
-              blurRadius: 14,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 56,
-              height: 56,
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  CodifyMascot(
-                    size: 52,
-                    character: codifyCharacterFor(materialIndex),
-                  ),
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      width: 23,
-                      height: 23,
-                      decoration: BoxDecoration(
-                        color: accent,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.softWhite,
-                          width: 2,
-                        ),
-                      ),
-                      child: Icon(
-                        icon,
-                        color: accent.computeLuminance() > 0.32
-                            ? AppColors.darkText
-                            : AppColors.softWhite,
-                        size: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.softTint(accent, opacity: 0.22),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                number,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.darkText,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 56,
+            height: 56,
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                CodifyMascot(
+                  size: 52,
+                  character: codifyCharacterFor(materialIndex),
                 ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    width: 23,
+                    height: 23,
+                    decoration: BoxDecoration(
+                      color: accent,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.softWhite, width: 2),
+                    ),
+                    child: Icon(
+                      icon,
+                      color: accent.computeLuminance() > 0.32
+                          ? AppColors.darkText
+                          : AppColors.softWhite,
+                      size: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.softTint(accent, opacity: 0.22),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              number,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                color: AppColors.darkText,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

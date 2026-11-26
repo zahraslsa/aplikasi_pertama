@@ -6,6 +6,7 @@ import 'history_screen.dart';
 import 'material_detail_screen.dart';
 import 'material_screen.dart';
 import '../widgets/codify_mascot.dart';
+import '../widgets/codify_card_surface.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
@@ -149,12 +150,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       value: '${data.diagnosticHistory.length}',
                       icon: Icons.fact_check_outlined,
                       backgroundColor: AppColors.peach,
-                      shape: const BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(14),
-                        bottomLeft: Radius.circular(14),
-                        bottomRight: Radius.circular(24),
-                      ),
+                      silhouette: CodifyCardSilhouette.ticket,
                       iconColor: AppColors.darkText,
                     ),
                   ),
@@ -165,12 +161,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       value: '$averagePracticeScore',
                       icon: Icons.track_changes_rounded,
                       backgroundColor: AppColors.butterYellow,
-                      shape: const BorderRadius.only(
-                        topLeft: Radius.circular(14),
-                        topRight: Radius.circular(24),
-                        bottomLeft: Radius.circular(24),
-                        bottomRight: Radius.circular(14),
-                      ),
+                      silhouette: CodifyCardSilhouette.foldedNote,
                       iconColor: AppColors.darkText,
                     ),
                   ),
@@ -320,28 +311,18 @@ class _ProgressScreenState extends State<ProgressScreen> {
     required double progress,
     required int progressPercent,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppColors.primary, AppColors.deepBlue],
-        ),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(18),
-          bottomLeft: Radius.circular(18),
-          bottomRight: Radius.circular(30),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.22),
-            blurRadius: 22,
-            offset: const Offset(0, 9),
-          ),
-        ],
+    return CodifyCardSurface(
+      silhouette: CodifyCardSilhouette.sticker,
+      color: AppColors.primary,
+      gradient: const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [AppColors.primary, AppColors.deepBlue],
       ),
+      borderColor: AppColors.butterYellow.withValues(alpha: 0.8),
+      borderWidth: 1.5,
+      elevation: 6,
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -633,7 +614,7 @@ class _SummaryCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color backgroundColor;
-  final BorderRadius shape;
+  final CodifyCardSilhouette silhouette;
   final Color iconColor;
 
   const _SummaryCard({
@@ -641,19 +622,18 @@ class _SummaryCard extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.backgroundColor,
-    required this.shape,
+    required this.silhouette,
     required this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CodifyCardSurface(
+      silhouette: silhouette,
+      color: backgroundColor,
+      borderColor: AppColors.darkText.withValues(alpha: 0.16),
+      elevation: 2,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: shape,
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.65)),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -811,31 +791,18 @@ class _AchievementCard extends StatelessWidget {
               : AppColors.softWhite)
         : AppColors.textSecondary;
 
-    return Container(
+    return CodifyCardSurface(
       width: 164,
+      silhouette: CodifyCardSilhouette.ticket,
+      color: isUnlocked
+          ? AppColors.softTint(accent, opacity: 0.16)
+          : AppColors.surface,
+      borderColor: isUnlocked
+          ? accent.withValues(alpha: 0.82)
+          : AppColors.border,
+      borderWidth: isUnlocked ? 1.4 : 1,
+      elevation: isUnlocked ? 3 : 0,
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(14),
-          bottomLeft: Radius.circular(14),
-          bottomRight: Radius.circular(24),
-        ),
-        border: Border.all(
-          color: isUnlocked ? accent.withValues(alpha: 0.82) : AppColors.border,
-          width: isUnlocked ? 1.4 : 1,
-        ),
-        boxShadow: isUnlocked
-            ? [
-                BoxShadow(
-                  color: accent.withValues(alpha: 0.14),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5),
-                ),
-              ]
-            : const [],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
