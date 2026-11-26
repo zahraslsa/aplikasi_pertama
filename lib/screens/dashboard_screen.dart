@@ -4,6 +4,7 @@ import '../data/learning_store.dart';
 import '../theme/app_colors.dart';
 import '../widgets/codify_mascot.dart';
 import '../widgets/codify_card_surface.dart';
+import '../widgets/codify_progress_map.dart';
 import 'material_detail_screen.dart';
 import 'diagnostic_screen.dart';
 import 'material_screen.dart';
@@ -440,16 +441,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: LinearProgressIndicator(
-                  value: progress,
-                  minHeight: 8,
-                  backgroundColor: AppColors.dustyBlue.withValues(alpha: 0.36),
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    AppColors.forestGreen,
-                  ),
-                ),
+              CodifyProgressMap(
+                progress: progress,
+                completedCount: count,
+                totalMaterials: total,
               ),
               const SizedBox(height: 12),
               Text(

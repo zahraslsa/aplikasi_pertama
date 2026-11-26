@@ -72,9 +72,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
       appBar: AppBar(
         title: const Text('Progres Belajar'),
         actions: [
-          IconButton(
+          IconButton.filledTonal(
             onPressed: _reload,
             tooltip: 'Muat ulang progres',
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.softTint(
+                AppColors.dustyBlue,
+                opacity: 0.2,
+              ),
+              foregroundColor: AppColors.forestGreen,
+            ),
             icon: const Icon(Icons.refresh_rounded),
           ),
         ],
@@ -169,6 +176,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
               const SizedBox(height: 20),
               _buildCompetencyCard(latestTopicScores),
+              const SizedBox(height: 20),
+              _buildLearningMap(data),
               const SizedBox(height: 24),
               const Text(
                 'Pencapaian belajar',
@@ -286,6 +295,20 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 ),
               const SizedBox(height: 24),
               OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.forestGreen,
+                  backgroundColor: AppColors.softTint(
+                    AppColors.dustyBlue,
+                    opacity: 0.12,
+                  ),
+                  side: BorderSide(
+                    color: AppColors.forestGreen.withValues(alpha: 0.28),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -428,13 +451,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(18),
-          topRight: Radius.circular(28),
-          bottomLeft: Radius.circular(28),
-          bottomRight: Radius.circular(18),
-        ),
-        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
         boxShadow: [
           BoxShadow(
             color: AppColors.forestGreen.withValues(alpha: 0.06),
@@ -449,15 +467,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
           Row(
             children: [
               Container(
-                width: 42,
-                height: 42,
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
-                  color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.3),
-                  borderRadius: BorderRadius.circular(14),
+                  color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.2),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(
-                  Icons.auto_graph_rounded,
+                  Icons.hub_rounded,
                   color: AppColors.forestGreen,
+                  size: 23,
                 ),
               ),
               const SizedBox(width: 12),
@@ -469,21 +488,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       'Peta kompetensi',
                       style: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(
-                      width: 62,
-                      height: 8,
-                      child: CustomPaint(painter: _SketchUnderlinePainter()),
-                    ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 3),
                     const Text(
-                      'Nilai dari tes diagnostik terakhir',
+                      'Pahami kekuatan dan fokus belajarmu',
                       style: TextStyle(
                         color: AppColors.textSecondary,
-                        fontSize: 11,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -491,7 +505,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           if (entries.isEmpty)
             Container(
               width: double.infinity,
@@ -525,19 +539,154 @@ class _ProgressScreenState extends State<ProgressScreen> {
           else
             ...List.generate(entries.length, (index) {
               final entry = entries[index];
-              return Padding(
-                padding: EdgeInsets.only(
-                  bottom: index == entries.length - 1 ? 0 : 14,
-                ),
-                child: _CompetencyScoreRow(
-                  topic: entry.key,
-                  score: entry.value as int,
-                  accent:
-                      AppColors.learningAccents[index %
-                          AppColors.learningAccents.length],
-                ),
+              final material = MaterialScreen.basicMaterials.firstWhere(
+                (item) => item['title'] == entry.key,
+                orElse: () => const {'icon': Icons.code_rounded},
+              );
+              return _CompetencyDiagramNode(
+                key: ValueKey('competency-node-${entry.key}'),
+                topic: entry.key,
+                score: entry.value as int,
+                icon: material['icon'] as IconData,
+                accent: AppColors
+                    .learningAccents[index % AppColors.learningAccents.length],
+                isLast: index == entries.length - 1,
               );
             }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLearningMap(_ProgressData data) {
+    String? nextMaterialNumber;
+    for (final material in MaterialScreen.allMaterials) {
+      final number = material['number'] as String;
+      if (!data.completedMaterials.contains(number)) {
+        nextMaterialNumber = number;
+        break;
+      }
+    }
+
+    return Container(
+      key: const ValueKey('learning-roadmap'),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.deepBlue.withValues(alpha: 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: AppColors.softTint(AppColors.peach, opacity: 0.2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.route_rounded,
+                  color: AppColors.deepBlue,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Jalur belajar',
+                      style: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      'Satu titik untuk setiap materi',
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.softTint(
+                    AppColors.butterYellow,
+                    opacity: 0.3,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '${MaterialScreen.allMaterials.length} titik',
+                  style: const TextStyle(
+                    color: AppColors.darkText,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          ...List.generate(MaterialScreen.allMaterials.length, (index) {
+            final material = MaterialScreen.allMaterials[index];
+            final number = material['number'] as String;
+            final completed = data.completedMaterials.contains(number);
+            final hasPracticed = data.practiceHistory.any(
+              (attempt) => attempt['materialNumber'] == number,
+            );
+            final isNext = number == nextMaterialNumber;
+            final lastAttempt = data.practiceHistory.lastWhere(
+              (attempt) => attempt['materialNumber'] == number,
+              orElse: () => const <String, dynamic>{},
+            );
+            final score = lastAttempt['score'] as int?;
+
+            return _LearningMapNode(
+              key: ValueKey('progress-map-node-$number'),
+              number: number,
+              title: material['title'] as String,
+              icon: material['icon'] as IconData,
+              isCompleted: completed,
+              hasPracticed: hasPracticed,
+              isNext: isNext,
+              score: score,
+              isLast: index == MaterialScreen.allMaterials.length - 1,
+              onTap: () async {
+                await Navigator.push<void>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        MaterialDetailScreen(material: material),
+                  ),
+                );
+                if (mounted) {
+                  _reload();
+                }
+              },
+            );
+          }),
         ],
       ),
     );
@@ -637,7 +786,15 @@ class _SummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: iconColor),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.softWhite.withValues(alpha: 0.62),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(icon, color: iconColor, size: 22),
+          ),
           const SizedBox(height: 12),
           Text(
             value,
@@ -662,110 +819,356 @@ class _SummaryCard extends StatelessWidget {
   }
 }
 
-class _CompetencyScoreRow extends StatelessWidget {
+class _CompetencyDiagramNode extends StatelessWidget {
   final String topic;
   final int score;
+  final IconData icon;
   final Color accent;
+  final bool isLast;
 
-  const _CompetencyScoreRow({
+  const _CompetencyDiagramNode({
+    super.key,
     required this.topic,
     required this.score,
+    required this.icon,
     required this.accent,
+    required this.isLast,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                topic,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+    final reachedTarget = score >= 80;
+    final scoreColor = reachedTarget ? AppColors.success : accent;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 40,
+            child: Column(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: AppColors.softTint(accent, opacity: 0.2),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: accent.withValues(alpha: 0.65),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Icon(icon, color: AppColors.darkText, size: 19),
                 ),
-              ),
+                if (!isLast)
+                  CustomPaint(
+                    size: const Size(2, 24),
+                    painter: _DottedConnectorPainter(
+                      color: accent.withValues(alpha: 0.7),
+                    ),
+                  ),
+              ],
             ),
-            const SizedBox(width: 10),
-            Text(
-              '$score/100',
-              style: const TextStyle(
-                color: AppColors.forestGreen,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: LinearProgressIndicator(
-            value: score.clamp(0, 100) / 100,
-            minHeight: 7,
-            backgroundColor: accent.withValues(alpha: 0.18),
-            valueColor: AlwaysStoppedAnimation(accent),
           ),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.softTint(accent, opacity: 0.08),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: accent.withValues(alpha: 0.22)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          topic,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          reachedTarget ? 'Target tercapai' : 'Perlu diasah',
+                          style: TextStyle(
+                            color: reachedTarget
+                                ? AppColors.success
+                                : AppColors.textSecondary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: 44,
+                    height: 44,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox.expand(
+                          child: CircularProgressIndicator(
+                            value: score.clamp(0, 100) / 100,
+                            strokeWidth: 4,
+                            backgroundColor: accent.withValues(alpha: 0.16),
+                            valueColor: AlwaysStoppedAnimation(scoreColor),
+                          ),
+                        ),
+                        Text(
+                          '$score',
+                          style: const TextStyle(
+                            color: AppColors.darkText,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _SketchUnderlinePainter extends CustomPainter {
-  const _SketchUnderlinePainter();
+class _LearningMapNode extends StatelessWidget {
+  final String number;
+  final String title;
+  final IconData icon;
+  final bool isCompleted;
+  final bool hasPracticed;
+  final bool isNext;
+  final int? score;
+  final bool isLast;
+  final VoidCallback onTap;
+
+  const _LearningMapNode({
+    super.key,
+    required this.number,
+    required this.title,
+    required this.icon,
+    required this.isCompleted,
+    required this.hasPracticed,
+    required this.isNext,
+    required this.score,
+    required this.isLast,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = AppColors.learningAccentFor(number);
+    final statusColor = isCompleted
+        ? AppColors.success
+        : hasPracticed
+        ? AppColors.dustyBlue
+        : isNext
+        ? AppColors.deepBlue
+        : AppColors.textSecondary;
+    final status = isCompleted
+        ? 'Selesai'
+        : hasPracticed
+        ? 'Sudah latihan'
+        : isNext
+        ? 'Langkah berikutnya'
+        : 'Belum ada latihan';
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 36,
+            child: Column(
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: isCompleted
+                        ? AppColors.success
+                        : isNext
+                        ? AppColors.deepBlue
+                        : AppColors.softTint(accent, opacity: 0.2),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: statusColor.withValues(alpha: 0.75),
+                      width: 2,
+                    ),
+                    boxShadow: isNext
+                        ? [
+                            BoxShadow(
+                              color: AppColors.deepBlue.withValues(alpha: 0.18),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Icon(
+                    isCompleted
+                        ? Icons.check_rounded
+                        : hasPracticed
+                        ? Icons.code_rounded
+                        : isNext
+                        ? Icons.play_arrow_rounded
+                        : Icons.circle_outlined,
+                    color: isCompleted || isNext
+                        ? AppColors.softWhite
+                        : AppColors.darkText,
+                    size: 18,
+                  ),
+                ),
+                if (!isLast)
+                  CustomPaint(
+                    size: const Size(2, 30),
+                    painter: _DottedConnectorPainter(
+                      color: isCompleted
+                          ? AppColors.success.withValues(alpha: 0.6)
+                          : AppColors.border,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                key: ValueKey('progress-map-tap-$number'),
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(17),
+                child: Ink(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isNext
+                        ? AppColors.softTint(AppColors.deepBlue, opacity: 0.08)
+                        : AppColors.softTint(accent, opacity: 0.07),
+                    borderRadius: BorderRadius.circular(17),
+                    border: Border.all(
+                      color: isNext
+                          ? AppColors.deepBlue.withValues(alpha: 0.38)
+                          : AppColors.border.withValues(alpha: 0.75),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: AppColors.softTint(accent, opacity: 0.22),
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: Icon(icon, color: AppColors.darkText, size: 20),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '$number  $title',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 7,
+                                  height: 7,
+                                  decoration: BoxDecoration(
+                                    color: statusColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    status,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: statusColor,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                if (score != null)
+                                  Text(
+                                    '$score/100',
+                                    style: const TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppColors.textSecondary,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DottedConnectorPainter extends CustomPainter {
+  final Color color;
+
+  const _DottedConnectorPainter({required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final peachStroke = Paint()
-      ..color = AppColors.peach.withValues(alpha: 0.9)
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 1.8;
-    final blueStroke = Paint()
-      ..color = AppColors.deepBlue.withValues(alpha: 0.45)
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 1;
-
-    canvas.drawPath(
-      Path()
-        ..moveTo(1, size.height * 0.58)
-        ..quadraticBezierTo(
-          size.width * 0.3,
-          size.height * 0.12,
-          size.width * 0.52,
-          size.height * 0.55,
-        )
-        ..quadraticBezierTo(
-          size.width * 0.76,
-          size.height * 0.88,
-          size.width - 1,
-          size.height * 0.4,
-        ),
-      peachStroke,
-    );
-    canvas.drawPath(
-      Path()
-        ..moveTo(4, size.height * 0.9)
-        ..quadraticBezierTo(
-          size.width * 0.45,
-          size.height * 0.56,
-          size.width * 0.82,
-          size.height * 0.82,
-        ),
-      blueStroke,
-    );
+    final paint = Paint()..color = color;
+    final centerX = size.width / 2;
+    for (var y = 3.0; y < size.height; y += 7) {
+      canvas.drawCircle(Offset(centerX, y), 1.5, paint);
+    }
   }
 
   @override
-  bool shouldRepaint(covariant _SketchUnderlinePainter oldDelegate) => false;
+  bool shouldRepaint(covariant _DottedConnectorPainter oldDelegate) {
+    return oldDelegate.color != color;
+  }
 }
 
 class _AchievementCard extends StatelessWidget {

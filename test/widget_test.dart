@@ -9,6 +9,7 @@ import 'package:aplikasi_pertama/screens/material_practice_screen.dart';
 import 'package:aplikasi_pertama/screens/material_screen.dart';
 import 'package:aplikasi_pertama/screens/progress_screen.dart';
 import 'package:aplikasi_pertama/widgets/codify_mascot.dart';
+import 'package:aplikasi_pertama/widgets/codify_progress_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -234,11 +235,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('0%'), findsOneWidget);
     expect(
-      tester
-          .widget<LinearProgressIndicator>(
-            find.byType(LinearProgressIndicator).first,
-          )
-          .value,
+      tester.widget<CodifyProgressMap>(find.byType(CodifyProgressMap)).progress,
       0,
     );
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
@@ -303,8 +300,11 @@ void main() {
     expect(find.text('8% progres belajar'), findsOneWidget);
     expect(find.text('11 materi belum selesai'), findsOneWidget);
     expect(find.text('Peta kompetensi'), findsOneWidget);
-    expect(find.text('Nilai dari tes diagnostik terakhir'), findsOneWidget);
-    expect(find.text('0/100'), findsNWidgets(3));
+    expect(find.text('Pahami kekuatan dan fokus belajarmu'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('competency-node-Operator')),
+      findsOneWidget,
+    );
     expect(
       tester
           .widget<LinearProgressIndicator>(
@@ -314,6 +314,21 @@ void main() {
       closeTo(1 / 12, 0.0001),
     );
     expect(find.text('1'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('learning-roadmap')),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.byKey(const ValueKey('learning-roadmap')), findsOneWidget);
+    for (final topic in ['Operator', 'Percabangan', 'Perulangan']) {
+      expect(
+        find.descendant(
+          of: find.byKey(ValueKey('competency-node-$topic')),
+          matching: find.text('0'),
+        ),
+        findsOneWidget,
+      );
+    }
     await tester.scrollUntilVisible(
       find.text('Langkah pertama'),
       240,
@@ -341,6 +356,43 @@ void main() {
     expect(find.byType(HistoryScreen), findsOneWidget);
     expect(find.text('Tes Diagnostik'), findsOneWidget);
     expect(find.text('Latihan Algoritma & Flowchart'), findsOneWidget);
+  });
+
+  testWidgets('learning map reflects stored progress and opens a lesson', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(360, 1300);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await LearningStore.markMaterialCompleted('01');
+    await LearningStore.savePracticeResult(
+      materialNumber: '02',
+      materialTitle: 'Variabel & Tipe Data',
+      score: 60,
+      correctAnswers: 3,
+      totalQuestions: 5,
+    );
+
+    await tester.pumpWidget(const MaterialApp(home: ProgressScreen()));
+    await tester.pumpAndSettle();
+
+    final completedNode = find.descendant(
+      of: find.byKey(const ValueKey('progress-map-node-01')),
+      matching: find.text('Selesai'),
+    );
+    final practicedNode = find.descendant(
+      of: find.byKey(const ValueKey('progress-map-node-02')),
+      matching: find.text('Sudah latihan'),
+    );
+    expect(completedNode, findsOneWidget);
+    expect(practicedNode, findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('progress-map-tap-02')));
+    await tester.pumpAndSettle();
+    expect(find.byType(MaterialDetailScreen), findsOneWidget);
+    expect(find.text('Variabel & Tipe Data'), findsOneWidget);
   });
 
   testWidgets('progress achievements unlock at completed-material milestones', (
@@ -422,6 +474,10 @@ void main() {
     expect(
       find.text('1 dari 12 materi selesai. Ketuk untuk melihat progres.'),
       findsOneWidget,
+    );
+    expect(
+      tester.widget<CodifyProgressMap>(find.byType(CodifyProgressMap)).progress,
+      closeTo(1 / 12, 0.0001),
     );
   });
 
