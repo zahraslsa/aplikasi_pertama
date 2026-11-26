@@ -299,6 +299,19 @@ class _MaterialScreenState extends State<MaterialScreen> {
     final hasStarted = materialProgress.hasStarted(number);
     final progress = materialProgress.progressFor(number);
     final accent = AppColors.learningAccentFor(number);
+    final cardRadius = (int.tryParse(number) ?? 0).isEven
+        ? const BorderRadius.only(
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(24),
+            bottomLeft: Radius.circular(24),
+            bottomRight: Radius.circular(14),
+          )
+        : const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(14),
+            bottomLeft: Radius.circular(14),
+            bottomRight: Radius.circular(24),
+          );
     final statusColor = isCompleted
         ? AppColors.forestGreen
         : AppColors.darkText;
@@ -319,7 +332,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
         : 'Belum dimulai';
 
     return InkWell(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: cardRadius,
       onTap: () async {
         await Navigator.push<void>(
           context,
@@ -337,9 +350,9 @@ class _MaterialScreenState extends State<MaterialScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.softTint(accent, opacity: 0.12),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: accent.withValues(alpha: 0.3)),
+          color: AppColors.softTint(accent, opacity: 0.14),
+          borderRadius: cardRadius,
+          border: Border.all(color: accent.withValues(alpha: 0.34)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -128,8 +128,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: AppColors.softTint(AppColors.butterYellow, opacity: 0.3),
-              borderRadius: BorderRadius.circular(18),
+              color: AppColors.softTint(AppColors.butterYellow, opacity: 0.34),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(28),
+                topRight: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(28),
+              ),
+              border: Border.all(
+                color: AppColors.peach.withValues(alpha: 0.36),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,6 +181,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                     icon: const Icon(Icons.play_arrow_rounded),
                     label: const Text('Mulai Tes'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.butterYellow,
+                      foregroundColor: AppColors.darkText,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -393,8 +409,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.32),
-              borderRadius: BorderRadius.circular(20),
+              color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.3),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(26),
+                topRight: Radius.circular(18),
+                bottomLeft: Radius.circular(18),
+                bottomRight: Radius.circular(26),
+              ),
+              border: Border.all(
+                color: AppColors.dustyBlue.withValues(alpha: 0.42),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,8 +489,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String number,
   }) {
     final accent = AppColors.learningAccentFor(number);
+    final cardRadius = (int.tryParse(number) ?? 0).isEven
+        ? const BorderRadius.only(
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(24),
+            bottomLeft: Radius.circular(24),
+            bottomRight: Radius.circular(14),
+          )
+        : const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(14),
+            bottomLeft: Radius.circular(14),
+            bottomRight: Radius.circular(24),
+          );
     return InkWell(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: cardRadius,
       onTap: () async {
         await Navigator.push<void>(
           context,
@@ -485,7 +522,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.softTint(accent, opacity: 0.16),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: cardRadius,
           border: Border.all(color: accent.withValues(alpha: 0.42)),
         ),
         child: Row(

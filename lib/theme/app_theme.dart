@@ -24,19 +24,19 @@ class AppTheme {
       ),
 
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.softWhite,
-        indicatorColor: AppColors.primaryLight,
+        backgroundColor: AppColors.primary,
+        indicatorColor: AppColors.butterYellow,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: selected ? AppColors.primary : AppColors.textSecondary,
+            color: selected ? AppColors.darkText : AppColors.softWhite,
             fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: selected ? AppColors.primary : AppColors.textSecondary,
+            color: selected ? AppColors.darkText : AppColors.softWhite,
           );
         }),
       ),

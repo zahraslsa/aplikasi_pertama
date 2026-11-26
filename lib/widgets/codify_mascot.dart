@@ -26,7 +26,7 @@ class _CodifyMascotPainter extends CustomPainter {
   static const _sageLight = AppColors.skyBlue;
   static const _sageDark = AppColors.deepBlue;
   static const _cream = AppColors.softWhite;
-  static const _orange = AppColors.skyBlue;
+  static const _orange = AppColors.peach;
 
   final Paint _fill = Paint()..style = PaintingStyle.fill;
   final Paint _detailStroke = Paint()

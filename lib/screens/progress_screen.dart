@@ -317,9 +317,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.softTint(AppColors.sageGreen, opacity: 0.36),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.sageGreen.withValues(alpha: 0.55)),
+        color: AppColors.softTint(AppColors.sageGreen, opacity: 0.42),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(28),
+          topRight: Radius.circular(18),
+          bottomLeft: Radius.circular(18),
+          bottomRight: Radius.circular(28),
+        ),
+        border: Border.all(color: AppColors.sageGreen.withValues(alpha: 0.62)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,7 +431,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(28),
+          bottomLeft: Radius.circular(28),
+          bottomRight: Radius.circular(18),
+        ),
         border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
@@ -548,8 +558,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.softTint(AppColors.peach, opacity: 0.24),
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.softTint(AppColors.peach, opacity: 0.28),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(26),
+          topRight: Radius.circular(16),
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(26),
+        ),
       ),
       child: Row(
         children: [
@@ -779,8 +794,13 @@ class _AchievementCard extends StatelessWidget {
       width: 164,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.softTint(accent, opacity: isUnlocked ? 0.34 : 0.14),
-        borderRadius: BorderRadius.circular(18),
+        color: AppColors.softTint(accent, opacity: isUnlocked ? 0.38 : 0.14),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(22),
+          topRight: Radius.circular(14),
+          bottomLeft: Radius.circular(14),
+          bottomRight: Radius.circular(22),
+        ),
         border: Border.all(
           color: isUnlocked ? accent.withValues(alpha: 0.6) : AppColors.border,
         ),
