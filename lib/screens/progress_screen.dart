@@ -148,11 +148,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       label: 'Tes diagnostik',
                       value: '${data.diagnosticHistory.length}',
                       icon: Icons.fact_check_outlined,
-                      backgroundColor: AppColors.softTint(
-                        AppColors.peach,
-                        opacity: 0.24,
+                      backgroundColor: AppColors.peach,
+                      shape: const BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(14),
+                        bottomLeft: Radius.circular(14),
+                        bottomRight: Radius.circular(24),
                       ),
-                      iconColor: AppColors.forestGreen,
+                      iconColor: AppColors.darkText,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -161,9 +164,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       label: 'Rata-rata latihan',
                       value: '$averagePracticeScore',
                       icon: Icons.track_changes_rounded,
-                      backgroundColor: AppColors.softTint(
-                        AppColors.butterYellow,
-                        opacity: 0.28,
+                      backgroundColor: AppColors.butterYellow,
+                      shape: const BorderRadius.only(
+                        topLeft: Radius.circular(14),
+                        topRight: Radius.circular(24),
+                        bottomLeft: Radius.circular(24),
+                        bottomRight: Radius.circular(14),
                       ),
                       iconColor: AppColors.darkText,
                     ),
@@ -317,14 +323,24 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.softTint(AppColors.sageGreen, opacity: 0.42),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.primary, AppColors.deepBlue],
+        ),
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(28),
+          topLeft: Radius.circular(30),
           topRight: Radius.circular(18),
           bottomLeft: Radius.circular(18),
-          bottomRight: Radius.circular(28),
+          bottomRight: Radius.circular(30),
         ),
-        border: Border.all(color: AppColors.sageGreen.withValues(alpha: 0.62)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.22),
+            blurRadius: 22,
+            offset: const Offset(0, 9),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -338,15 +354,18 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     Text(
                       'Ringkasan belajar',
                       style: TextStyle(
-                        color: AppColors.forestGreen,
+                        color: AppColors.butterYellow,
                         fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     SizedBox(height: 6),
                     Text(
                       'Materi selesai',
-                      style: TextStyle(color: AppColors.darkText, fontSize: 14),
+                      style: TextStyle(
+                        color: AppColors.softWhite,
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -361,18 +380,18 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       child: CircularProgressIndicator(
                         value: progress,
                         strokeWidth: 7,
-                        backgroundColor: AppColors.sageGreen.withValues(
-                          alpha: 0.35,
+                        backgroundColor: AppColors.softWhite.withValues(
+                          alpha: 0.24,
                         ),
                         valueColor: const AlwaysStoppedAnimation(
-                          AppColors.forestGreen,
+                          AppColors.butterYellow,
                         ),
                       ),
                     ),
                     Text(
                       '$progressPercent%',
                       style: const TextStyle(
-                        color: AppColors.forestGreen,
+                        color: AppColors.butterYellow,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -386,7 +405,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           Text(
             '$completedCount dari $totalMaterials',
             style: const TextStyle(
-              color: AppColors.darkText,
+              color: AppColors.softWhite,
               fontSize: 29,
               fontWeight: FontWeight.bold,
             ),
@@ -394,10 +413,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           const SizedBox(height: 3),
           Text(
             '$remainingCount materi belum selesai',
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 13,
-            ),
+            style: const TextStyle(color: AppColors.softWhite, fontSize: 13),
           ),
           const SizedBox(height: 14),
           ClipRRect(
@@ -405,16 +421,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 8,
-              backgroundColor: AppColors.softWhite,
-              valueColor: const AlwaysStoppedAnimation(AppColors.forestGreen),
+              backgroundColor: AppColors.softWhite.withValues(alpha: 0.24),
+              valueColor: const AlwaysStoppedAnimation(AppColors.butterYellow),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             '$progressPercent% progres belajar',
             style: const TextStyle(
-              color: AppColors.forestGreen,
-              fontWeight: FontWeight.w600,
+              color: AppColors.butterYellow,
+              fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
           ),
@@ -617,6 +633,7 @@ class _SummaryCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color backgroundColor;
+  final BorderRadius shape;
   final Color iconColor;
 
   const _SummaryCard({
@@ -624,6 +641,7 @@ class _SummaryCard extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.backgroundColor,
+    required this.shape,
     required this.iconColor,
   });
 
@@ -633,8 +651,8 @@ class _SummaryCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        borderRadius: shape,
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.65)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -653,8 +671,9 @@ class _SummaryCard extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: AppColors.textSecondary,
+              color: AppColors.darkText,
               fontSize: 12,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -729,8 +748,8 @@ class _SketchUnderlinePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1.8;
-    final greenStroke = Paint()
-      ..color = AppColors.forestGreen.withValues(alpha: 0.35)
+    final blueStroke = Paint()
+      ..color = AppColors.deepBlue.withValues(alpha: 0.45)
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1;
@@ -761,7 +780,7 @@ class _SketchUnderlinePainter extends CustomPainter {
           size.width * 0.82,
           size.height * 0.82,
         ),
-      greenStroke,
+      blueStroke,
     );
   }
 
@@ -787,23 +806,35 @@ class _AchievementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconColor = isUnlocked
-        ? AppColors.forestGreen
+        ? (accent.computeLuminance() > 0.32
+              ? AppColors.darkText
+              : AppColors.softWhite)
         : AppColors.textSecondary;
 
     return Container(
       width: 164,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.softTint(accent, opacity: isUnlocked ? 0.38 : 0.14),
+        color: AppColors.surface,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(22),
+          topLeft: Radius.circular(24),
           topRight: Radius.circular(14),
           bottomLeft: Radius.circular(14),
-          bottomRight: Radius.circular(22),
+          bottomRight: Radius.circular(24),
         ),
         border: Border.all(
-          color: isUnlocked ? accent.withValues(alpha: 0.6) : AppColors.border,
+          color: isUnlocked ? accent.withValues(alpha: 0.82) : AppColors.border,
+          width: isUnlocked ? 1.4 : 1,
         ),
+        boxShadow: isUnlocked
+            ? [
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.14),
+                  blurRadius: 14,
+                  offset: const Offset(0, 5),
+                ),
+              ]
+            : const [],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -814,13 +845,10 @@ class _AchievementCard extends StatelessWidget {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: AppColors.softTint(
-                    accent,
-                    opacity: isUnlocked ? 0.5 : 0.22,
-                  ),
+                  color: isUnlocked ? accent : AppColors.warmBeige,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: accent.withValues(alpha: isUnlocked ? 0.65 : 0.3),
+                    color: accent.withValues(alpha: isUnlocked ? 0.9 : 0.35),
                   ),
                 ),
                 child: Icon(icon, color: iconColor, size: 22),

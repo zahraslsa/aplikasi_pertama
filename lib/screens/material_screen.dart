@@ -312,11 +312,12 @@ class _MaterialScreenState extends State<MaterialScreen> {
             bottomLeft: Radius.circular(14),
             bottomRight: Radius.circular(24),
           );
-    final statusColor = isCompleted
-        ? AppColors.forestGreen
-        : AppColors.darkText;
+    final accentForeground = accent.computeLuminance() > 0.32
+        ? AppColors.darkText
+        : AppColors.softWhite;
+    final statusColor = isCompleted ? AppColors.success : AppColors.darkText;
     final statusBackground = isCompleted
-        ? AppColors.softTint(AppColors.sageGreen, opacity: 0.42)
+        ? AppColors.softTint(AppColors.sageGreen, opacity: 0.22)
         : hasStarted
         ? AppColors.softTint(accent, opacity: 0.42)
         : AppColors.warmBeige;
@@ -350,9 +351,16 @@ class _MaterialScreenState extends State<MaterialScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.softTint(accent, opacity: 0.14),
+          color: AppColors.surface,
           borderRadius: cardRadius,
-          border: Border.all(color: accent.withValues(alpha: 0.34)),
+          border: Border.all(color: accent.withValues(alpha: 0.78), width: 1.3),
+          boxShadow: [
+            BoxShadow(
+              color: accent.withValues(alpha: 0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,12 +371,12 @@ class _MaterialScreenState extends State<MaterialScreen> {
                   width: 52,
                   height: 52,
                   decoration: BoxDecoration(
-                    color: AppColors.softTint(accent, opacity: 0.42),
-                    borderRadius: BorderRadius.circular(15),
+                    color: accent,
+                    borderRadius: BorderRadius.circular(17),
                   ),
                   child: Icon(
                     material['icon'] as IconData,
-                    color: AppColors.darkText,
+                    color: accentForeground,
                     size: 26,
                   ),
                 ),
@@ -383,16 +391,16 @@ class _MaterialScreenState extends State<MaterialScreen> {
                           vertical: 3,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.softTint(accent, opacity: 0.38),
+                          color: accent,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           'MATERI $number',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 0.3,
-                            color: AppColors.darkText,
+                            color: accentForeground,
                           ),
                         ),
                       ),

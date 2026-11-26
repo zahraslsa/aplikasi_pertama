@@ -409,7 +409,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.3),
+              color: AppColors.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(26),
                 topRight: Radius.circular(18),
@@ -417,26 +417,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 bottomRight: Radius.circular(26),
               ),
               border: Border.all(
-                color: AppColors.dustyBlue.withValues(alpha: 0.42),
+                color: AppColors.dustyBlue.withValues(alpha: 0.7),
+                width: 1.2,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.dustyBlue.withValues(alpha: 0.14),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(
-                      Icons.auto_graph_rounded,
-                      color: AppColors.forestGreen,
-                      size: 26,
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Icon(
+                        Icons.auto_graph_rounded,
+                        color: AppColors.softWhite,
+                        size: 23,
+                      ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 12),
                     Text(
                       'Progres Belajarmu',
                       style: TextStyle(
                         color: AppColors.darkText,
                         fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
@@ -521,9 +537,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.softTint(accent, opacity: 0.16),
+          color: AppColors.surface,
           borderRadius: cardRadius,
-          border: Border.all(color: accent.withValues(alpha: 0.42)),
+          border: Border.all(color: accent.withValues(alpha: 0.72), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: accent.withValues(alpha: 0.12),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -531,10 +554,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.softTint(accent, opacity: 0.42),
-                borderRadius: BorderRadius.circular(14),
+                color: accent,
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(icon, color: AppColors.darkText, size: 25),
+              child: Icon(
+                icon,
+                color: accent.computeLuminance() > 0.32
+                    ? AppColors.darkText
+                    : AppColors.softWhite,
+                size: 25,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -560,12 +589,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-            Text(
-              number,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.softTint(accent, opacity: 0.22),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                number,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.darkText,
+                ),
               ),
             ),
           ],
