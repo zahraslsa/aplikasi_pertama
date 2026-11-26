@@ -457,7 +457,7 @@ class _DiagnosticQuestionScreenState extends State<DiagnosticQuestionScreen> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: isSelected
-                                        ? Colors.white
+                                        ? AppColors.softWhite
                                         : AppColors.textSecondary,
                                   ),
                                 ),

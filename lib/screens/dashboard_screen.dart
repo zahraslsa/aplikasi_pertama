@@ -303,7 +303,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [AppColors.primary, AppColors.primaryDark],
+                colors: [AppColors.sageForest, AppColors.forestGreen],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -316,14 +316,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     Icon(
                       Icons.auto_graph_rounded,
-                      color: Colors.white,
+                      color: AppColors.softWhite,
                       size: 26,
                     ),
                     SizedBox(width: 10),
                     Text(
                       'Progres Belajarmu',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.softWhite,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -334,7 +334,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Text(
                   '${(progress * 100).round()}%',
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.softWhite,
                     fontSize: 34,
                     fontWeight: FontWeight.bold,
                   ),
@@ -345,9 +345,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 8,
-                    backgroundColor: const Color(0x66FFFFFF),
+                    backgroundColor: const Color(0x66FFFDF7),
                     valueColor: const AlwaysStoppedAnimation<Color>(
-                      Colors.white,
+                      AppColors.softWhite,
                     ),
                   ),
                 ),
@@ -356,7 +356,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   count == 0
                       ? '0 dari $total materi selesai. Mulai belajar untuk melihat perkembanganmu.'
                       : '$count dari $total materi selesai. Ketuk untuk melihat progres.',
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                  style: const TextStyle(
+                    color: AppColors.softWhite,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),

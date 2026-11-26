@@ -69,7 +69,7 @@ class DiagnosticScreen extends StatelessWidget {
                       child: const Icon(
                         Icons.psychology_alt_rounded,
                         size: 44,
-                        color: Colors.white,
+                        color: AppColors.softWhite,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -211,7 +211,7 @@ class DiagnosticScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFF5E5),
+                  color: AppColors.warmBeige,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Row(

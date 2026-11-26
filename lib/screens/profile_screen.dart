@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       backgroundColor: AppColors.primary,
                       child: Icon(
                         Icons.person_rounded,
-                        color: Colors.white,
+                        color: AppColors.softWhite,
                         size: 40,
                       ),
                     ),

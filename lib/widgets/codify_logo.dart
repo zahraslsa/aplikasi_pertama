@@ -22,7 +22,7 @@ class CodifyLogo extends StatelessWidget {
           ),
           child: Icon(
             Icons.code_rounded,
-            color: Colors.white,
+            color: AppColors.softWhite,
             size: size * 0.58,
           ),
         ),

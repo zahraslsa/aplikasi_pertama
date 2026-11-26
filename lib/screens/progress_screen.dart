@@ -134,7 +134,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryDark],
+                    colors: [AppColors.primaryDark, AppColors.primary],
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -143,13 +143,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   children: [
                     const Text(
                       'Materi selesai',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                      style: TextStyle(color: Color(0xB3FFFDF7), fontSize: 14),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '$completedCount dari $totalMaterials',
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.softWhite,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
@@ -160,14 +160,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       child: LinearProgressIndicator(
                         value: progress,
                         minHeight: 9,
-                        backgroundColor: Colors.white24,
-                        valueColor: const AlwaysStoppedAnimation(Colors.white),
+                        backgroundColor: Color(0x3DFFFDF7),
+                        valueColor: const AlwaysStoppedAnimation(
+                          AppColors.softWhite,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '${(progress * 100).round()}% progres belajar',
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: AppColors.softWhite),
                     ),
                   ],
                 ),

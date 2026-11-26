@@ -194,7 +194,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primary, AppColors.primaryDark],
+          colors: [AppColors.primaryDark, AppColors.primary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -203,12 +203,12 @@ class _MaterialScreenState extends State<MaterialScreen> {
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.menu_book_rounded, color: Colors.white, size: 38),
+          Icon(Icons.menu_book_rounded, color: AppColors.softWhite, size: 38),
           SizedBox(height: 16),
           Text(
             'Belajar Pemrograman',
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.softWhite,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -218,7 +218,11 @@ class _MaterialScreenState extends State<MaterialScreen> {
             'Pelajari konsep pemrograman dari dasar '
             'hingga penerapannya melalui materi yang '
             'disusun secara bertahap.',
-            style: TextStyle(color: Colors.white, fontSize: 13, height: 1.5),
+            style: TextStyle(
+              color: AppColors.softWhite,
+              fontSize: 13,
+              height: 1.5,
+            ),
           ),
         ],
       ),

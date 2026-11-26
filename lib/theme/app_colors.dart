@@ -3,24 +3,29 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Warna utama CODIFY
-  static const Color primary = Color(0xFF6C4AB6);
-  static const Color primaryLight = Color(0xFFEDE5FF);
-  static const Color primaryDark = Color(0xFF4B2E83);
+  static const Color sageGreen = Color(0xFFA8BFA3);
+  static const Color forestGreen = Color(0xFF426B50);
+  static const Color softCream = Color(0xFFF7F4E9);
+  static const Color warmBeige = Color(0xFFE8DDC8);
+  static const Color darkText = Color(0xFF30352F);
+  static const Color softWhite = Color(0xFFFFFDF7);
 
-  // Warna latar belakang
-  static const Color background = Color(0xFFF8F7FC);
-  static const Color surface = Colors.white;
+  // Darkened sage stop keeps white text legible on the progress gradient.
+  static const Color sageForest = Color(0xFF577A60);
 
-  // Warna teks
-  static const Color textPrimary = Color(0xFF242033);
-  static const Color textSecondary = Color(0xFF777387);
+  static const Color primary = forestGreen;
+  static const Color primaryLight = warmBeige;
+  static const Color primaryDark = Color(0xFF355640);
 
-  // Warna status pembelajaran
-  static const Color success = Color(0xFF2E9D70);
-  static const Color warning = Color(0xFFF0A43C);
-  static const Color error = Color(0xFFE05260);
+  static const Color background = softCream;
+  static const Color surface = softWhite;
 
-  // Warna pendukung
-  static const Color border = Color(0xFFE8E4F0);
+  static const Color textPrimary = darkText;
+  static const Color textSecondary = Color(0xFF62685F);
+
+  static const Color success = forestGreen;
+  static const Color warning = Color(0xFF9A5E2A);
+  static const Color error = Color(0xFFB23E45);
+
+  static const Color border = warmBeige;
 }

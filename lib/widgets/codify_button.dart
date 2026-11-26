@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+
 class CodifyButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -25,7 +27,7 @@ class CodifyButton extends StatelessWidget {
                 height: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.5,
-                  color: Colors.white,
+                  color: AppColors.softWhite,
                 ),
               )
             : Text(text),

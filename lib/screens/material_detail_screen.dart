@@ -271,7 +271,7 @@ print(status);''',
               padding: const EdgeInsets.all(22),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
+                  colors: [AppColors.primaryDark, AppColors.primary],
                 ),
                 borderRadius: BorderRadius.circular(22),
               ),
@@ -280,14 +280,14 @@ print(status);''',
                 children: [
                   Icon(
                     material['icon'] as IconData,
-                    color: Colors.white,
+                    color: AppColors.softWhite,
                     size: 38,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     material['title'] as String,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.softWhite,
                       fontSize: 23,
                       fontWeight: FontWeight.bold,
                     ),
@@ -296,7 +296,7 @@ print(status);''',
                   Text(
                     material['subtitle'] as String,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.softWhite,
                       fontSize: 13,
                       height: 1.5,
                     ),

@@ -37,11 +37,11 @@ class DiagnosticResultScreen extends StatelessWidget {
 
   Color getScoreColor(int score) {
     if (score >= 80) {
-      return Colors.green;
+      return AppColors.success;
     } else if (score >= 60) {
-      return Colors.orange;
+      return AppColors.warning;
     } else {
-      return Colors.red;
+      return AppColors.error;
     }
   }
 
@@ -137,7 +137,7 @@ class DiagnosticResultScreen extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primary, AppColors.primaryDark],
+          colors: [AppColors.primaryDark, AppColors.primary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -145,12 +145,16 @@ class DiagnosticResultScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Icon(Icons.emoji_events_rounded, color: Colors.white, size: 54),
+          const Icon(
+            Icons.emoji_events_rounded,
+            color: AppColors.softWhite,
+            size: 54,
+          ),
           const SizedBox(height: 14),
           const Text(
             'Tes Diagnostik Selesai',
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.softWhite,
               fontSize: 21,
               fontWeight: FontWeight.bold,
             ),
@@ -158,13 +162,13 @@ class DiagnosticResultScreen extends StatelessWidget {
           const SizedBox(height: 10),
           const Text(
             'Nilai keseluruhan kamu',
-            style: TextStyle(color: Colors.white70, fontSize: 13),
+            style: TextStyle(color: Color(0xB3FFFDF7), fontSize: 13),
           ),
           const SizedBox(height: 6),
           Text(
             '$overallScore',
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.softWhite,
               fontSize: 42,
               fontWeight: FontWeight.bold,
             ),
@@ -172,7 +176,7 @@ class DiagnosticResultScreen extends StatelessWidget {
           const SizedBox(height: 4),
           const Text(
             'dari 100',
-            style: TextStyle(color: Colors.white70, fontSize: 12),
+            style: TextStyle(color: Color(0xB3FFFDF7), fontSize: 12),
           ),
         ],
       ),
