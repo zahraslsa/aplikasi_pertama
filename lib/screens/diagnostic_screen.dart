@@ -54,7 +54,7 @@ class DiagnosticScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
+                  color: AppColors.softTint(AppColors.dustyBlue, opacity: 0.26),
                   borderRadius: BorderRadius.circular(22),
                 ),
                 child: Column(
@@ -63,13 +63,13 @@ class DiagnosticScreen extends StatelessWidget {
                       width: 82,
                       height: 82,
                       decoration: BoxDecoration(
-                        color: AppColors.primary,
+                        color: AppColors.dustyBlue,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: const Icon(
                         Icons.psychology_alt_rounded,
                         size: 44,
-                        color: AppColors.softWhite,
+                        color: AppColors.darkText,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -153,13 +153,16 @@ class DiagnosticScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               ...topics.map((topic) {
+                final accent = AppColors.learningAccentFor(
+                  topic['number'] as String,
+                );
                 return Container(
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: AppColors.softTint(accent, opacity: 0.1),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: accent.withValues(alpha: 0.36)),
                   ),
                   child: Row(
                     children: [
@@ -167,12 +170,12 @@ class DiagnosticScreen extends StatelessWidget {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: AppColors.primaryLight,
+                          color: AppColors.softTint(accent, opacity: 0.38),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Icon(
                           topic['icon'] as IconData,
-                          color: AppColors.primary,
+                          color: AppColors.darkText,
                           size: 25,
                         ),
                       ),

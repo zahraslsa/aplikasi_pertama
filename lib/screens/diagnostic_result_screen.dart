@@ -136,11 +136,7 @@ class DiagnosticResultScreen extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primaryDark, AppColors.primary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: AppColors.forestGreen,
         borderRadius: BorderRadius.circular(22),
       ),
       child: Column(

@@ -258,6 +258,7 @@ print(status);''',
   Widget build(BuildContext context) {
     final number = material['number'] as String;
     final content = contents[number]!;
+    final accent = AppColors.learningAccentFor(number);
 
     return Scaffold(
       appBar: AppBar(title: Text('Materi $number')),
@@ -270,9 +271,7 @@ print(status);''',
               width: double.infinity,
               padding: const EdgeInsets.all(22),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primaryDark, AppColors.primary],
-                ),
+                color: AppColors.softTint(accent, opacity: 0.3),
                 borderRadius: BorderRadius.circular(22),
               ),
               child: Column(
@@ -280,14 +279,14 @@ print(status);''',
                 children: [
                   Icon(
                     material['icon'] as IconData,
-                    color: AppColors.softWhite,
+                    color: AppColors.darkText,
                     size: 38,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     material['title'] as String,
                     style: const TextStyle(
-                      color: AppColors.softWhite,
+                      color: AppColors.darkText,
                       fontSize: 23,
                       fontWeight: FontWeight.bold,
                     ),
@@ -296,7 +295,7 @@ print(status);''',
                   Text(
                     material['subtitle'] as String,
                     style: const TextStyle(
-                      color: AppColors.softWhite,
+                      color: AppColors.textSecondary,
                       fontSize: 13,
                       height: 1.5,
                     ),

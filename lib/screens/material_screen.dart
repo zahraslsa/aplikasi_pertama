@@ -193,22 +193,18 @@ class _MaterialScreenState extends State<MaterialScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primaryDark, AppColors.primary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: AppColors.sageGreen,
         borderRadius: BorderRadius.circular(22),
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.menu_book_rounded, color: AppColors.softWhite, size: 38),
+          Icon(Icons.menu_book_rounded, color: AppColors.forestGreen, size: 38),
           SizedBox(height: 16),
           Text(
             'Belajar Pemrograman',
             style: TextStyle(
-              color: AppColors.softWhite,
+              color: AppColors.darkText,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -219,7 +215,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
             'hingga penerapannya melalui materi yang '
             'disusun secara bertahap.',
             style: TextStyle(
-              color: AppColors.softWhite,
+              color: AppColors.darkText,
               fontSize: 13,
               height: 1.5,
             ),
@@ -235,6 +231,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
     required Set<String> completedMaterials,
   }) {
     final isCompleted = completedMaterials.contains(material['number']);
+    final accent = AppColors.learningAccentFor(material['number'] as String);
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () async {
@@ -254,9 +251,9 @@ class _MaterialScreenState extends State<MaterialScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.softTint(accent, opacity: 0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: accent.withValues(alpha: 0.36)),
         ),
         child: Row(
           children: [
@@ -264,12 +261,12 @@ class _MaterialScreenState extends State<MaterialScreen> {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: AppColors.primaryLight,
+                color: AppColors.softTint(accent, opacity: 0.38),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Icon(
                 material['icon'] as IconData,
-                color: AppColors.primary,
+                color: AppColors.darkText,
                 size: 26,
               ),
             ),
@@ -285,7 +282,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      color: AppColors.darkText,
                     ),
                   ),
                   const SizedBox(height: 3),

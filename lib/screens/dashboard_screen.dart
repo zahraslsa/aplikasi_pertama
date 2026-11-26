@@ -164,7 +164,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: AppColors.primaryLight,
+              color: AppColors.softTint(AppColors.peach, opacity: 0.24),
               borderRadius: BorderRadius.circular(18),
             ),
             child: Column(
@@ -375,6 +375,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String subtitle,
     required String number,
   }) {
+    final accent = AppColors.learningAccentFor(number);
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () async {
@@ -394,9 +395,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.softTint(accent, opacity: 0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: accent.withValues(alpha: 0.36)),
         ),
         child: Row(
           children: [
@@ -404,10 +405,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.primaryLight,
+                color: AppColors.softTint(accent, opacity: 0.38),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(icon, color: AppColors.primary, size: 25),
+              child: Icon(icon, color: AppColors.darkText, size: 25),
             ),
             const SizedBox(width: 14),
             Expanded(
