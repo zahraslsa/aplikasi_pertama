@@ -7,7 +7,6 @@ import 'package:aplikasi_pertama/screens/history_screen.dart';
 import 'package:aplikasi_pertama/screens/material_detail_screen.dart';
 import 'package:aplikasi_pertama/screens/material_practice_screen.dart';
 import 'package:aplikasi_pertama/screens/material_screen.dart';
-import 'package:aplikasi_pertama/screens/profile_screen.dart';
 import 'package:aplikasi_pertama/screens/progress_screen.dart';
 import 'package:aplikasi_pertama/widgets/codify_mascot.dart';
 import 'package:flutter/material.dart';
@@ -426,38 +425,6 @@ void main() {
     );
   });
 
-  testWidgets('profile form saves learner information locally', (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
-    await tester.pumpAndSettle();
-
-    expect(find.text('SC'), findsNothing);
-    await tester.enterText(find.byType(TextField).first, 'Zahra PPLG');
-    expect(find.text('ZP'), findsNothing);
-    await tester.dragUntilVisible(
-      find.text('Simpan Profil'),
-      find.byType(ListView),
-      const Offset(0, -250),
-    );
-    await tester.tap(find.text('Simpan Profil'));
-    await tester.pumpAndSettle();
-
-    expect((await LearningStore.getProfile())['name'], 'Zahra PPLG');
-    expect(find.text('ZP'), findsOneWidget);
-    expect(find.text('Profil berhasil disimpan di perangkat.'), findsOneWidget);
-  });
-
-  testWidgets('profile layout fits a narrow screen', (tester) async {
-    tester.view.physicalSize = const Size(320, 760);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
-    await tester.pumpAndSettle();
-
-    expect(tester.takeException(), isNull);
-  });
-
   test('all 12 materials provide valid interactive practice', () {
     expect(MaterialScreen.allMaterials, hasLength(12));
     expect(MaterialPracticeScreen.questionBank, hasLength(12));
@@ -477,36 +444,23 @@ void main() {
     }
   });
 
-  test(
-    'diagnostic, practice, completion, and profile persist locally',
-    () async {
-      await LearningStore.saveDiagnosticResult(
-        overallScore: 80,
-        topicScores: const {'Operator': 80},
-      );
-      await LearningStore.savePracticeResult(
-        materialNumber: '03',
-        materialTitle: 'Operator',
-        score: 100,
-        correctAnswers: 2,
-        totalQuestions: 2,
-      );
-      await LearningStore.saveProfile({
-        'name': 'Zahra',
-        'username': 'zahra',
-        'email': 'zahra@example.com',
-        'class': 'X PPLG',
-      });
-
-      final diagnosticHistory = await LearningStore.getDiagnosticHistory();
-      final practiceHistory = await LearningStore.getPracticeHistory();
-      final completedMaterials = await LearningStore.getCompletedMaterials();
-      final profile = await LearningStore.getProfile();
-
-      expect(diagnosticHistory.single['overallScore'], 80);
-      expect(practiceHistory.single['score'], 100);
-      expect(completedMaterials, contains('03'));
-      expect(profile['name'], 'Zahra');
-    },
-  );
+  test('diagnostic, practice, and completion persist locally', () async {
+    await LearningStore.saveDiagnosticResult(
+      overallScore: 80,
+      topicScores: const {'Operator': 80},
+    );
+    await LearningStore.savePracticeResult(
+      materialNumber: '03',
+      materialTitle: 'Operator',
+      score: 100,
+      correctAnswers: 2,
+      totalQuestions: 2,
+    );
+    final diagnosticHistory = await LearningStore.getDiagnosticHistory();
+    final practiceHistory = await LearningStore.getPracticeHistory();
+    final completedMaterials = await LearningStore.getCompletedMaterials();
+    expect(diagnosticHistory.single['overallScore'], 80);
+    expect(practiceHistory.single['score'], 100);
+    expect(completedMaterials, contains('03'));
+  });
 }

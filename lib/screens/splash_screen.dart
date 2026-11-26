@@ -23,7 +23,7 @@ class _CodifySplashScreenState extends State<CodifySplashScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1450),
+      duration: const Duration(milliseconds: 1900),
     )..addStatusListener(_onAnimationStatus);
     _mascotScale = Tween<double>(
       begin: 0.72,
@@ -228,14 +228,33 @@ class _CodifySplashScreenState extends State<CodifySplashScreen>
                                       ),
                                     ),
                                     const SizedBox(height: 12),
-                                    Text(
-                                      'Menyiapkan ruang belajar...',
-                                      style: TextStyle(
-                                        color: AppColors.softWhite.withValues(
-                                          alpha: 0.78,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            'MEMUAT CODIFY',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: AppColors.softWhite
+                                                  .withValues(alpha: 0.84),
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: 0.7,
+                                            ),
+                                          ),
                                         ),
-                                        fontSize: 12,
-                                      ),
+                                        Text(
+                                          '${(_controller.value * 100).round()}%',
+                                          style: const TextStyle(
+                                            color: AppColors.butterYellow,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

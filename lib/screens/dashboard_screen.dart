@@ -6,7 +6,6 @@ import '../widgets/codify_mascot.dart';
 import 'material_detail_screen.dart';
 import 'diagnostic_screen.dart';
 import 'material_screen.dart';
-import 'profile_screen.dart';
 import 'progress_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -19,7 +18,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
   int _progressRevision = 0;
-  late Future<Map<String, String>> _profile;
   late Future<Set<String>> _completedMaterials;
 
   @override
@@ -29,7 +27,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _reloadHomeData() {
-    _profile = LearningStore.getProfile();
     _completedMaterials = LearningStore.getCompletedMaterials();
   }
 
@@ -46,14 +43,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: AppColors.primary,
                 ),
               ),
-              actions: [
-                IconButton(
-                  onPressed: () => setState(() => _selectedIndex = 3),
-                  icon: const Icon(Icons.account_circle_outlined),
-                  tooltip: 'Profil',
-                ),
-                const SizedBox(width: 8),
-              ],
             )
           : null,
       body: IndexedStack(
@@ -62,7 +51,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _buildHomeContent(context),
           const MaterialScreen(),
           ProgressScreen(key: ValueKey(_progressRevision)),
-          const ProfileScreen(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -90,10 +78,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           NavigationDestination(
             icon: Icon(Icons.bar_chart_rounded),
             label: 'Progres',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline_rounded),
-            label: 'Profil',
           ),
         ],
       ),
@@ -296,74 +280,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             children: [
               Expanded(
-                child: FutureBuilder<Map<String, String>>(
-                  future: _profile,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text(
-                        'Profil gagal dimuat: ${snapshot.error}',
-                        style: const TextStyle(color: AppColors.softWhite),
-                      );
-                    }
-                    final name = snapshot.data?['name'] ?? 'Sobat CODIFY';
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.softWhite.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.auto_awesome_rounded,
-                                size: 14,
-                                color: AppColors.softWhite,
-                              ),
-                              SizedBox(width: 6),
-                              Text(
-                                'TEMAN BELAJAR CODING',
-                                style: TextStyle(
-                                  color: AppColors.softWhite,
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.7,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Hai, $name!',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.softWhite.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.auto_awesome_rounded,
+                            size: 14,
                             color: AppColors.softWhite,
-                            fontSize: 22,
-                            height: 1.15,
-                            fontWeight: FontWeight.w800,
                           ),
-                        ),
-                        const SizedBox(height: 7),
-                        Text(
-                          'Siap belajar coding hari ini?',
-                          style: TextStyle(
-                            color: AppColors.softWhite.withValues(alpha: 0.9),
-                            fontSize: 13,
-                            height: 1.4,
+                          SizedBox(width: 6),
+                          Text(
+                            'TEMAN BELAJAR CODING',
+                            style: TextStyle(
+                              color: AppColors.softWhite,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.7,
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'Hai, Sobat CODIFY!',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: AppColors.softWhite,
+                        fontSize: 22,
+                        height: 1.15,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    SizedBox(height: 7),
+                    Text(
+                      'Siap belajar coding hari ini?',
+                      style: TextStyle(
+                        color: AppColors.softWhite,
+                        fontSize: 13,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: 10),
