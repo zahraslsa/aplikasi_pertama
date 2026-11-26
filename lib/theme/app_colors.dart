@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static const Color sageGreen = Color(0xFF8ED8B5);
-  static const Color forestGreen = Color(0xFF2382F6);
-  static const Color softCream = Color(0xFFF4F7FC);
-  static const Color warmBeige = Color(0xFFDCE6F3);
-  static const Color darkText = Color(0xFF17253B);
-  static const Color softWhite = Color(0xFFFFFFFF);
-  static const Color peach = Color(0xFFFF9D66);
-  static const Color butterYellow = Color(0xFFFFD35E);
-  static const Color dustyRose = Color(0xFFE77E98);
-  static const Color dustyBlue = Color(0xFF70A9F5);
-  static const Color softLilac = Color(0xFFA993EC);
-  static const Color skyBlue = Color(0xFF67B8F8);
-  static const Color deepBlue = Color(0xFF1E63CD);
+  static const Color sageGreen = Color(0xFF9BC9B0);
+  static const Color forestGreen = Color(0xFF376FAB);
+  static const Color softCream = Color(0xFFF7F5F0);
+  static const Color warmBeige = Color(0xFFE8E3D8);
+  static const Color darkText = Color(0xFF27384C);
+  static const Color softWhite = Color(0xFFFFFEFB);
+  static const Color peach = Color(0xFFED9B78);
+  static const Color butterYellow = Color(0xFFF2CD69);
+  static const Color dustyRose = Color(0xFFD98997);
+  static const Color dustyBlue = Color(0xFF7EA5CF);
+  static const Color softLilac = Color(0xFFA999D0);
+  static const Color skyBlue = Color(0xFF8DBFE2);
+  static const Color deepBlue = Color(0xFF2F5E90);
 
   static const List<Color> learningAccents = [
     dustyBlue,
@@ -26,21 +26,21 @@ class AppColors {
     sageGreen,
   ];
 
-  // Deep green keeps success states distinct from the blue primary.
-  static const Color sageForest = Color(0xFF287A58);
+  // Green remains reserved for successful progress states.
+  static const Color sageForest = Color(0xFF32785B);
 
   static const Color primary = forestGreen;
   static const Color primaryLight = warmBeige;
-  static const Color primaryDark = Color(0xFF17376B);
+  static const Color primaryDark = Color(0xFF254365);
 
   static const Color background = softCream;
   static const Color surface = softWhite;
 
   static const Color textPrimary = darkText;
-  static const Color textSecondary = Color(0xFF68788F);
+  static const Color textSecondary = Color(0xFF697887);
 
-  static const Color success = Color(0xFF2E936D);
-  static const Color warning = Color(0xFFAD6A24);
+  static const Color success = Color(0xFF39896A);
+  static const Color warning = Color(0xFFAD6A2C);
   static const Color error = Color(0xFFB23E45);
 
   static const Color border = warmBeige;
