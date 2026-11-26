@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
-
 class CodifyMascot extends StatelessWidget {
   final double size;
 
@@ -10,7 +8,7 @@ class CodifyMascot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Maskot Codify, kura-kura kecil belajar coding',
+      label: 'Maskot Codify, makhluk tunas kecil yang suka coding',
       image: true,
       child: SizedBox.square(
         dimension: size,
@@ -21,19 +19,18 @@ class CodifyMascot extends StatelessWidget {
 }
 
 class _CodifyMascotPainter extends CustomPainter {
-  static const _outline = AppColors.textPrimary;
-  static const _shell = AppColors.success;
-  static const _shellLight = Color(0xFF75C49D);
-  static const _cream = Color(0xFFFFF3D8);
-  static const _cheek = Color(0xFFF29B75);
-  static const _pencil = AppColors.warning;
+  static const _forest = Color(0xFF294D3B);
+  static const _sage = Color(0xFF91B79A);
+  static const _sageLight = Color(0xFFB7CFB1);
+  static const _sageDark = Color(0xFF73987F);
+  static const _cream = Color(0xFFFFF2D8);
+  static const _orange = Color(0xFFE89A65);
 
   final Paint _fill = Paint()..style = PaintingStyle.fill;
-  final Paint _stroke = Paint()
+  final Paint _detailStroke = Paint()
     ..style = PaintingStyle.stroke
     ..strokeCap = StrokeCap.round
-    ..strokeJoin = StrokeJoin.round
-    ..strokeWidth = 3.2;
+    ..strokeJoin = StrokeJoin.round;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -51,158 +48,231 @@ class _CodifyMascotPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..strokeWidth = 3.2
-      ..color = _outline;
+      ..color = _forest;
 
-    _drawPencil(canvas, outline);
     _drawTail(canvas, outline);
     _drawFeet(canvas, outline);
-    _drawShell(canvas, outline);
-    _drawHead(canvas, outline);
+    _drawArms(canvas, outline);
+    _drawSprout(canvas, outline);
+    _drawBody(canvas, outline);
     _drawFace(canvas);
-    _drawShellCode(canvas);
+    _drawCodeMark(canvas);
+    _drawSketchAccents(canvas);
 
     canvas.restore();
   }
 
-  void _drawPencil(Canvas canvas, Paint outline) {
-    final pencil = Path()
-      ..moveTo(37, 51)
-      ..lineTo(27, 24)
-      ..quadraticBezierTo(26, 21, 29, 22)
-      ..lineTo(38, 27)
-      ..lineTo(47, 49)
-      ..close();
-    canvas.drawPath(pencil, _fill..color = _pencil);
-    canvas.drawPath(pencil, outline);
-    canvas.drawLine(const Offset(29, 27), const Offset(39, 48), outline);
-    canvas.drawPath(
-      Path()
-        ..moveTo(27, 24)
-        ..lineTo(25, 16)
-        ..lineTo(31, 22),
-      outline,
-    );
-    canvas.drawLine(const Offset(31, 35), const Offset(35, 33), outline);
-  }
-
   void _drawTail(Canvas canvas, Paint outline) {
     final tail = Path()
-      ..moveTo(42, 105)
-      ..quadraticBezierTo(20, 100, 17, 114)
-      ..quadraticBezierTo(26, 124, 44, 115);
-    canvas.drawPath(tail, _stroke..color = _shell);
+      ..moveTo(43, 99)
+      ..cubicTo(28, 93, 17, 100, 19, 112)
+      ..cubicTo(21, 124, 37, 127, 46, 115)
+      ..cubicTo(51, 109, 49, 103, 43, 99)
+      ..close();
+    canvas.drawPath(tail, _fill..color = _sageDark);
     canvas.drawPath(tail, outline);
+
+    final curl = Path()
+      ..moveTo(31, 108)
+      ..cubicTo(31, 102, 39, 101, 42, 106)
+      ..cubicTo(45, 111, 40, 116, 35, 115);
+    canvas.drawPath(
+      curl,
+      _detailStroke
+        ..color = _sageLight
+        ..strokeWidth = 2.2,
+    );
   }
 
   void _drawFeet(Canvas canvas, Paint outline) {
     final leftFoot = Path()
-      ..moveTo(52, 119)
-      ..quadraticBezierTo(48, 132, 43, 139)
-      ..quadraticBezierTo(41, 145, 51, 145)
-      ..lineTo(66, 144)
-      ..quadraticBezierTo(70, 141, 65, 137)
-      ..lineTo(65, 120)
+      ..moveTo(59, 119)
+      ..cubicTo(58, 128, 51, 132, 51, 137)
+      ..cubicTo(52, 141, 65, 142, 72, 138)
+      ..cubicTo(75, 135, 71, 130, 73, 121)
       ..close();
     final rightFoot = Path()
-      ..moveTo(91, 119)
-      ..lineTo(91, 137)
-      ..quadraticBezierTo(87, 141, 91, 144)
-      ..lineTo(108, 145)
-      ..quadraticBezierTo(117, 143, 111, 138)
-      ..lineTo(103, 119)
+      ..moveTo(96, 120)
+      ..cubicTo(97, 129, 94, 134, 97, 138)
+      ..cubicTo(102, 142, 115, 140, 116, 136)
+      ..cubicTo(116, 132, 108, 128, 108, 119)
       ..close();
+
     for (final foot in [leftFoot, rightFoot]) {
-      canvas.drawPath(foot, _fill..color = _shellLight);
+      canvas.drawPath(foot, _fill..color = _sageDark);
       canvas.drawPath(foot, outline);
     }
   }
 
-  void _drawShell(Canvas canvas, Paint outline) {
-    final shell = Path()
-      ..moveTo(41, 87)
-      ..quadraticBezierTo(44, 68, 66, 67)
-      ..lineTo(94, 70)
-      ..quadraticBezierTo(111, 77, 108, 102)
-      ..quadraticBezierTo(104, 120, 83, 124)
-      ..lineTo(53, 121)
-      ..quadraticBezierTo(36, 114, 41, 87)
-      ..close();
-    canvas.drawPath(shell, _fill..color = _shell);
-    canvas.drawPath(shell, outline);
+  void _drawArms(Canvas canvas, Paint outline) {
+    final leftArm = Path()
+      ..moveTo(40, 76)
+      ..cubicTo(32, 75, 26, 79, 27, 85)
+      ..cubicTo(28, 91, 36, 92, 43, 86);
+    final rightArm = Path()
+      ..moveTo(126, 76)
+      ..cubicTo(134, 74, 140, 78, 138, 84)
+      ..cubicTo(137, 90, 130, 91, 124, 85);
 
-    final panel = Path()
-      ..moveTo(47, 88)
-      ..quadraticBezierTo(68, 75, 96, 83)
-      ..quadraticBezierTo(103, 91, 96, 108)
-      ..quadraticBezierTo(73, 117, 48, 105)
-      ..quadraticBezierTo(44, 97, 47, 88)
-      ..close();
-    canvas.drawPath(panel, _stroke..color = _shellLight);
-    canvas.drawPath(panel, outline);
-    canvas.drawLine(const Offset(70, 81), const Offset(68, 112), outline);
-    canvas.drawLine(const Offset(48, 95), const Offset(98, 97), outline);
+    for (final arm in [leftArm, rightArm]) {
+      canvas.drawPath(
+        arm,
+        _detailStroke
+          ..color = _sageDark
+          ..strokeWidth = 10,
+      );
+      canvas.drawPath(arm, outline);
+    }
   }
 
-  void _drawHead(Canvas canvas, Paint outline) {
-    final head = Path()
-      ..moveTo(83, 58)
-      ..quadraticBezierTo(84, 37, 105, 34)
-      ..quadraticBezierTo(129, 31, 140, 50)
-      ..quadraticBezierTo(151, 68, 139, 85)
-      ..quadraticBezierTo(130, 99, 110, 93)
-      ..lineTo(92, 82)
-      ..quadraticBezierTo(81, 75, 83, 58)
+  void _drawSprout(Canvas canvas, Paint outline) {
+    final leftLeaf = Path()
+      ..moveTo(76, 43)
+      ..cubicTo(67, 33, 54, 25, 59, 15)
+      ..cubicTo(72, 13, 82, 25, 84, 37)
       ..close();
-    canvas.drawPath(head, _fill..color = _cream);
-    canvas.drawPath(head, outline);
+    final rightLeaf = Path()
+      ..moveTo(84, 40)
+      ..cubicTo(85, 26, 96, 16, 108, 19)
+      ..cubicTo(111, 30, 101, 39, 91, 45)
+      ..close();
 
-    final fringe = Path()
-      ..moveTo(91, 44)
-      ..quadraticBezierTo(105, 29, 122, 39)
-      ..quadraticBezierTo(112, 40, 108, 47)
-      ..quadraticBezierTo(103, 42, 97, 49);
-    canvas.drawPath(fringe, _stroke..color = _shell);
-    canvas.drawPath(fringe, outline);
+    canvas.drawPath(leftLeaf, _fill..color = _sageLight);
+    canvas.drawPath(leftLeaf, outline);
+    canvas.drawPath(rightLeaf, _fill..color = _sage);
+    canvas.drawPath(rightLeaf, outline);
+
+    final veins = _detailStroke
+      ..color = _forest.withValues(alpha: 0.6)
+      ..strokeWidth = 1.7;
+    canvas.drawPath(
+      Path()
+        ..moveTo(80, 40)
+        ..cubicTo(76, 31, 69, 24, 63, 19),
+      veins,
+    );
+    canvas.drawPath(
+      Path()
+        ..moveTo(86, 41)
+        ..cubicTo(90, 32, 99, 25, 106, 22),
+      veins,
+    );
+  }
+
+  void _drawBody(Canvas canvas, Paint outline) {
+    final body = Path()
+      ..moveTo(50, 49)
+      ..cubicTo(55, 39, 68, 36, 79, 41)
+      ..cubicTo(90, 33, 105, 37, 112, 46)
+      ..cubicTo(126, 44, 138, 55, 136, 69)
+      ..cubicTo(146, 81, 141, 97, 131, 105)
+      ..cubicTo(136, 119, 122, 132, 106, 132)
+      ..cubicTo(91, 143, 71, 139, 61, 130)
+      ..cubicTo(45, 132, 34, 120, 37, 105)
+      ..cubicTo(26, 94, 29, 77, 39, 67)
+      ..cubicTo(36, 58, 41, 52, 50, 49)
+      ..close();
+
+    canvas.drawPath(body, _fill..color = _sage);
+    canvas.drawPath(body, outline);
+
+    final belly = Path()
+      ..moveTo(55, 100)
+      ..cubicTo(66, 94, 101, 94, 114, 102)
+      ..cubicTo(123, 108, 118, 124, 106, 128)
+      ..cubicTo(92, 133, 69, 130, 58, 124)
+      ..cubicTo(49, 119, 47, 106, 55, 100)
+      ..close();
+    canvas.drawPath(belly, _fill..color = _cream);
+    canvas.drawPath(
+      belly,
+      _detailStroke
+        ..color = _forest
+        ..strokeWidth = 2.2,
+    );
   }
 
   void _drawFace(Canvas canvas) {
-    canvas.drawCircle(const Offset(109, 61), 3.4, _fill..color = _outline);
-    canvas.drawCircle(const Offset(132, 60), 3.4, _fill..color = _outline);
-    canvas.drawCircle(const Offset(110, 60), 0.9, _fill..color = Colors.white);
-    canvas.drawCircle(const Offset(133, 59), 0.9, _fill..color = Colors.white);
-    canvas.drawCircle(const Offset(100, 72), 4, _fill..color = _cheek);
-    canvas.drawCircle(const Offset(137, 71), 4, _fill..color = _cheek);
+    final eyePaint = Paint()..color = _forest;
+    canvas.drawOval(
+      Rect.fromCenter(center: const Offset(63, 70), width: 9, height: 12),
+      eyePaint,
+    );
+    canvas.drawOval(
+      Rect.fromCenter(center: const Offset(99, 68), width: 8, height: 11),
+      eyePaint,
+    );
+    canvas.drawCircle(const Offset(64, 68), 1.7, _fill..color = _cream);
+    canvas.drawCircle(const Offset(100, 66), 1.5, _fill..color = _cream);
+
+    final muzzle = Path()
+      ..moveTo(68, 79)
+      ..cubicTo(73, 74, 85, 74, 91, 79)
+      ..cubicTo(96, 83, 91, 91, 82, 92)
+      ..cubicTo(73, 92, 65, 86, 68, 79)
+      ..close();
+    canvas.drawPath(muzzle, _fill..color = _cream);
+    canvas.drawCircle(const Offset(80, 81), 2.1, _fill..color = _forest);
 
     final smile = Path()
-      ..moveTo(116, 72)
-      ..quadraticBezierTo(123, 80, 131, 71);
-    final smilePaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 2.4
-      ..color = _outline;
-    canvas.drawPath(smile, smilePaint);
+      ..moveTo(76, 86)
+      ..cubicTo(80, 90, 85, 90, 88, 85);
+    canvas.drawPath(
+      smile,
+      _detailStroke
+        ..color = _forest
+        ..strokeWidth = 2,
+    );
+
+    final cheekPaint = Paint()..color = _orange.withValues(alpha: 0.75);
+    canvas.drawOval(
+      Rect.fromCenter(center: const Offset(52, 84), width: 9, height: 5),
+      cheekPaint,
+    );
+    canvas.drawOval(
+      Rect.fromCenter(center: const Offset(111, 82), width: 9, height: 5),
+      cheekPaint,
+    );
   }
 
-  void _drawShellCode(Canvas canvas) {
-    final code = _stroke
-      ..color = _cream
-      ..strokeWidth = 3.4;
+  void _drawCodeMark(Canvas canvas) {
+    final code = _detailStroke
+      ..color = _forest
+      ..strokeWidth = 2.8;
     canvas.drawPath(
       Path()
-        ..moveTo(61, 91)
-        ..lineTo(54, 97)
-        ..lineTo(61, 103),
+        ..moveTo(75, 107)
+        ..lineTo(69, 112)
+        ..lineTo(75, 117),
       code,
     );
-    canvas.drawLine(const Offset(74, 90), const Offset(68, 104), code);
+    canvas.drawLine(const Offset(84, 106), const Offset(80, 118), code);
     canvas.drawPath(
       Path()
-        ..moveTo(80, 91)
-        ..lineTo(87, 97)
-        ..lineTo(80, 103),
+        ..moveTo(89, 107)
+        ..lineTo(95, 112)
+        ..lineTo(89, 117),
       code,
     );
+  }
+
+  void _drawSketchAccents(Canvas canvas) {
+    final sketch = _detailStroke
+      ..color = _forest.withValues(alpha: 0.45)
+      ..strokeWidth = 1.2;
+    canvas.drawPath(
+      Path()
+        ..moveTo(43, 57)
+        ..cubicTo(40, 60, 39, 63, 39, 66),
+      sketch,
+    );
+    canvas.drawPath(
+      Path()
+        ..moveTo(127, 57)
+        ..cubicTo(131, 61, 132, 65, 131, 68),
+      sketch,
+    );
+    canvas.drawLine(const Offset(67, 126), const Offset(71, 127), sketch);
   }
 
   @override
