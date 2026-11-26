@@ -9,6 +9,7 @@ import 'package:aplikasi_pertama/screens/material_practice_screen.dart';
 import 'package:aplikasi_pertama/screens/material_screen.dart';
 import 'package:aplikasi_pertama/screens/profile_screen.dart';
 import 'package:aplikasi_pertama/screens/progress_screen.dart';
+import 'package:aplikasi_pertama/widgets/codify_mascot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,9 @@ void main() {
 
     expect(find.text('CODIFY'), findsOneWidget);
     expect(find.text('Mulai Tes'), findsOneWidget);
+    expect(find.byType(CodifyMascot), findsOneWidget);
+    expect(find.text('Hai, Sobat CODIFY!'), findsOneWidget);
+    expect(find.text('Siap belajar coding hari ini?'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pumpAndSettle();

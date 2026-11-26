@@ -119,7 +119,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       );
                     }
                     return Text(
-                      'Halo, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
+                      'Hai, ${snapshot.data?['name'] ?? 'Sobat CODIFY'}!',
                       style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Siap meningkatkan kemampuan coding-mu hari ini?',
+            'Siap belajar coding hari ini?',
             style: TextStyle(
               fontSize: 14,
               color: AppColors.textSecondary,
