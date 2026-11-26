@@ -7,12 +7,31 @@ import '../theme/app_colors.dart';
 class _MaterialScreenState extends State<MaterialScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  late Future<Set<String>> _completedMaterials;
+  late Future<_MaterialProgress> _materialProgress;
 
   @override
   void initState() {
     super.initState();
-    _completedMaterials = LearningStore.getCompletedMaterials();
+    _materialProgress = _loadMaterialProgress();
+  }
+
+  Future<_MaterialProgress> _loadMaterialProgress() async {
+    final completedMaterials = await LearningStore.getCompletedMaterials();
+    final practiceHistory = await LearningStore.getPracticeHistory();
+    final latestScores = <String, double>{};
+
+    for (final attempt in practiceHistory) {
+      final materialNumber = attempt['materialNumber'];
+      final score = attempt['score'];
+      if (materialNumber is String && score is num) {
+        latestScores[materialNumber] = score.toDouble().clamp(0, 100) / 100;
+      }
+    }
+
+    return _MaterialProgress(
+      completedMaterials: completedMaterials,
+      latestScores: latestScores,
+    );
   }
 
   @override
@@ -77,8 +96,8 @@ class _MaterialScreenState extends State<MaterialScreen> {
 
             const SizedBox(height: 20),
 
-            FutureBuilder<Set<String>>(
-              future: _completedMaterials,
+            FutureBuilder<_MaterialProgress>(
+              future: _materialProgress,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text(
@@ -90,7 +109,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                final completedMaterials = snapshot.data!;
+                final materialProgress = snapshot.data!;
                 if (query.isNotEmpty) {
                   if (matchingMaterials.isEmpty) {
                     return const Padding(
@@ -119,7 +138,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                         (material) => _buildMaterialCard(
                           context,
                           material,
-                          completedMaterials: completedMaterials,
+                          materialProgress: materialProgress,
                         ),
                       ),
                     ],
@@ -150,7 +169,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                       (material) => _buildMaterialCard(
                         context,
                         material,
-                        completedMaterials: completedMaterials,
+                        materialProgress: materialProgress,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -175,7 +194,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                       (material) => _buildMaterialCard(
                         context,
                         material,
-                        completedMaterials: completedMaterials,
+                        materialProgress: materialProgress,
                       ),
                     ),
                   ],
@@ -228,10 +247,32 @@ class _MaterialScreenState extends State<MaterialScreen> {
   Widget _buildMaterialCard(
     BuildContext context,
     Map<String, dynamic> material, {
-    required Set<String> completedMaterials,
+    required _MaterialProgress materialProgress,
   }) {
-    final isCompleted = completedMaterials.contains(material['number']);
-    final accent = AppColors.learningAccentFor(material['number'] as String);
+    final number = material['number'] as String;
+    final isCompleted = materialProgress.isCompleted(number);
+    final hasStarted = materialProgress.hasStarted(number);
+    final progress = materialProgress.progressFor(number);
+    final accent = AppColors.learningAccentFor(number);
+    final statusColor = isCompleted
+        ? AppColors.forestGreen
+        : AppColors.darkText;
+    final statusBackground = isCompleted
+        ? AppColors.softTint(AppColors.sageGreen, opacity: 0.42)
+        : hasStarted
+        ? AppColors.softTint(accent, opacity: 0.42)
+        : AppColors.warmBeige;
+    final statusIcon = isCompleted
+        ? Icons.check_circle_rounded
+        : hasStarted
+        ? Icons.play_circle_outline_rounded
+        : Icons.radio_button_unchecked_rounded;
+    final statusLabel = isCompleted
+        ? 'Selesai dipelajari'
+        : hasStarted
+        ? 'Sedang dipelajari'
+        : 'Belum dimulai';
+
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () async {
@@ -243,7 +284,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
         );
         if (mounted) {
           setState(() {
-            _completedMaterials = LearningStore.getCompletedMaterials();
+            _materialProgress = _loadMaterialProgress();
           });
         }
       },
@@ -251,94 +292,154 @@ class _MaterialScreenState extends State<MaterialScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.softTint(accent, opacity: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: accent.withValues(alpha: 0.36)),
+          color: AppColors.softTint(accent, opacity: 0.12),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: accent.withValues(alpha: 0.3)),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: AppColors.softTint(accent, opacity: 0.38),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Icon(
-                material['icon'] as IconData,
-                color: AppColors.darkText,
-                size: 26,
-              ),
-            ),
-
-            const SizedBox(width: 14),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    material['number'] as String,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.darkText,
-                    ),
+            Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: AppColors.softTint(accent, opacity: 0.42),
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  const SizedBox(height: 3),
-                  Text(
-                    material['title'] as String,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
+                  child: Icon(
+                    material['icon'] as IconData,
+                    color: AppColors.darkText,
+                    size: 26,
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    material['subtitle'] as String,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      height: 1.4,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  if (isCompleted) ...[
-                    const SizedBox(height: 6),
-                    const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.check_circle_rounded,
-                          color: AppColors.success,
-                          size: 15,
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
                         ),
-                        SizedBox(width: 4),
-                        Text(
-                          'Selesai',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.success,
+                        decoration: BoxDecoration(
+                          color: AppColors.softTint(accent, opacity: 0.38),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'MATERI $number',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.3,
+                            color: AppColors.darkText,
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ],
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        material['title'] as String,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppColors.textSecondary,
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              material['subtitle'] as String,
+              style: const TextStyle(
+                fontSize: 12,
+                height: 1.4,
+                color: AppColors.textSecondary,
               ),
             ),
-
-            const SizedBox(width: 8),
-
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: AppColors.textSecondary,
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusBackground,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(statusIcon, size: 14, color: statusColor),
+                      const SizedBox(width: 5),
+                      Text(
+                        statusLabel,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: statusColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  '${(progress * 100).round()}%',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: LinearProgressIndicator(
+                value: progress,
+                minHeight: 5,
+                backgroundColor: accent.withValues(alpha: 0.24),
+                valueColor: const AlwaysStoppedAnimation(AppColors.forestGreen),
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class _MaterialProgress {
+  final Set<String> completedMaterials;
+  final Map<String, double> latestScores;
+
+  const _MaterialProgress({
+    required this.completedMaterials,
+    required this.latestScores,
+  });
+
+  bool isCompleted(String number) => completedMaterials.contains(number);
+
+  bool hasStarted(String number) => latestScores.containsKey(number);
+
+  double progressFor(String number) {
+    if (isCompleted(number)) {
+      return 1;
+    }
+    return latestScores[number] ?? 0;
   }
 }
 

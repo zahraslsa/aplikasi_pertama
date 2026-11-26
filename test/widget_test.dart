@@ -140,6 +140,37 @@ void main() {
     expect(MaterialScreen.allMaterials, hasLength(materialCount));
   });
 
+  testWidgets('material cards show status and practice progress', (
+    tester,
+  ) async {
+    await LearningStore.savePracticeResult(
+      materialNumber: '01',
+      materialTitle: 'Algoritma & Flowchart',
+      score: 60,
+      correctAnswers: 3,
+      totalQuestions: 5,
+    );
+    await LearningStore.markMaterialCompleted('02');
+
+    await tester.pumpWidget(const MaterialApp(home: MaterialScreen()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sedang dipelajari'), findsOneWidget);
+    expect(find.text('Selesai dipelajari'), findsOneWidget);
+    expect(find.text('Belum dimulai'), findsNWidgets(10));
+
+    final progressValues = tester
+        .widgetList<LinearProgressIndicator>(
+          find.byType(LinearProgressIndicator),
+        )
+        .map((indicator) => indicator.value!)
+        .toList();
+    expect(progressValues, hasLength(12));
+    expect(progressValues[0], closeTo(0.6, 0.0001));
+    expect(progressValues[1], 1);
+    expect(progressValues.skip(2), everyElement(0));
+  });
+
   testWidgets('material completion persists and updates the list card', (
     tester,
   ) async {
@@ -161,7 +192,7 @@ void main() {
 
     await tester.pageBack();
     await tester.pumpAndSettle();
-    expect(find.text('Selesai'), findsOneWidget);
+    expect(find.text('Selesai dipelajari'), findsOneWidget);
 
     await tester.tap(find.text('Algoritma & Flowchart').first);
     await tester.pumpAndSettle();
@@ -175,7 +206,7 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pumpAndSettle();
-    expect(find.text('Selesai'), findsOneWidget);
+    expect(find.text('Selesai dipelajari'), findsOneWidget);
     await tester.tap(find.byIcon(Icons.bar_chart_rounded));
     await tester.pumpAndSettle();
     expect(find.text('1 dari 12'), findsOneWidget);
@@ -213,7 +244,7 @@ void main() {
     );
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pumpAndSettle();
-    expect(find.text('Selesai'), findsNothing);
+    expect(find.text('Selesai dipelajari'), findsNothing);
     await tester.tap(find.byIcon(Icons.bar_chart_rounded));
     await tester.pumpAndSettle();
     expect(find.text('0 dari 12'), findsOneWidget);
