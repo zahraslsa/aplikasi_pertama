@@ -479,6 +479,30 @@ void main() {
       tester.widget<CodifyProgressMap>(find.byType(CodifyProgressMap)).progress,
       closeTo(1 / 12, 0.0001),
     );
+
+    final progressMap = find.byKey(const ValueKey('home-progress-scroll'));
+    await tester.ensureVisible(progressMap);
+    final scrollableMap = find.descendant(
+      of: progressMap,
+      matching: find.byType(Scrollable),
+    );
+    final scrollState = tester.state<ScrollableState>(scrollableMap);
+    await tester.drag(progressMap, const Offset(-220, 0));
+    await tester.pumpAndSettle();
+    expect(scrollState.position.pixels, greaterThan(0));
+    scrollState.position.jumpTo(0);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('home-progress-mascot')));
+    await tester.pumpAndSettle();
+    expect(find.byType(MaterialDetailScreen), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(MaterialDetailScreen),
+        matching: find.text('Algoritma & Flowchart'),
+      ),
+      findsOneWidget,
+    );
   });
 
   test('all 12 materials provide valid interactive practice', () {

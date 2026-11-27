@@ -55,35 +55,163 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ProgressScreen(key: ValueKey(_progressRevision)),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _selectedIndex = index;
-            if (index == 0) {
-              _reloadHomeData();
-            } else if (index == 2) {
-              _progressRevision++;
-            }
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
-            label: 'Beranda',
+      bottomNavigationBar: _buildNavigationDock(),
+    );
+  }
+
+  Widget _buildNavigationDock() {
+    return SafeArea(
+      top: false,
+      child: Container(
+        height: 72,
+        margin: const EdgeInsets.fromLTRB(16, 6, 16, 8),
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: AppColors.softWhite,
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(
+            color: AppColors.dustyBlue.withValues(alpha: 0.24),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
-            label: 'Materi',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Progres',
-          ),
-        ],
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primaryDark.withValues(alpha: 0.14),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            _buildNavigationItem(
+              index: 0,
+              label: 'Beranda',
+              icon: Icons.home_outlined,
+              selectedIcon: Icons.home_rounded,
+            ),
+            _buildNavigationItem(
+              index: 1,
+              label: 'Materi',
+              icon: Icons.menu_book_outlined,
+              selectedIcon: Icons.menu_book_outlined,
+            ),
+            _buildNavigationItem(
+              index: 2,
+              label: 'Progres',
+              icon: Icons.bar_chart_rounded,
+              selectedIcon: Icons.bar_chart_rounded,
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _buildNavigationItem({
+    required int index,
+    required String label,
+    required IconData icon,
+    required IconData selectedIcon,
+  }) {
+    final isSelected = _selectedIndex == index;
+
+    return Expanded(
+      child: Semantics(
+        button: true,
+        selected: isSelected,
+        label: label,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(23),
+          onTap: () => _selectTab(index),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+            height: 62,
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.butterYellow : Colors.transparent,
+              borderRadius: BorderRadius.circular(23),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isSelected ? selectedIcon : icon,
+                  color: isSelected
+                      ? AppColors.primaryDark
+                      : AppColors.textSecondary,
+                  size: 23,
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: isSelected
+                        ? AppColors.primaryDark
+                        : AppColors.textSecondary,
+                    fontSize: 10.5,
+                    fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _selectTab(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 0) {
+        _reloadHomeData();
+      } else if (index == 2) {
+        _progressRevision++;
+      }
+    });
+  }
+
+  Future<void> _openLastLearningMaterial(Set<String> completedMaterials) async {
+    final materials = MaterialScreen.allMaterials;
+    Map<String, dynamic>? destination;
+    final practiceHistory = await LearningStore.getPracticeHistory();
+
+    for (final attempt in practiceHistory.reversed) {
+      final number = attempt['materialNumber'];
+      if (number is String) {
+        for (final material in materials) {
+          if (material['number'] == number) {
+            destination = material;
+            break;
+          }
+        }
+      }
+      if (destination != null) {
+        break;
+      }
+    }
+
+    if (destination == null) {
+      for (final material in materials) {
+        if (completedMaterials.contains(material['number'] as String)) {
+          destination = material;
+        }
+      }
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            MaterialDetailScreen(material: destination ?? materials.first),
+      ),
+    );
+    if (mounted) {
+      setState(_reloadHomeData);
+    }
   }
 
   Widget _buildHomeContent(BuildContext context) {
@@ -445,6 +573,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 progress: progress,
                 completedCount: count,
                 totalMaterials: total,
+                onMascotTap: () {
+                  _openLastLearningMaterial(snapshot.data!);
+                },
               ),
               const SizedBox(height: 12),
               Text(
